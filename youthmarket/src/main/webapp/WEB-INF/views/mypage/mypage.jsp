@@ -59,7 +59,7 @@
 						<div class="profile_box">
 							<div class="profile_1">
 								<div class="profile_iamge_box">
-									<img src="${path }/resources/fileSave/${member.fileName }"
+									<img src="${path }/resources/images/fileSave/${member.fileName }"
 										alt="프로필 사진" width="300">
 								</div>
 								<div class="my_nickname">

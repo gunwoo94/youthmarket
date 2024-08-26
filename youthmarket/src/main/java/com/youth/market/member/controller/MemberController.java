@@ -49,7 +49,7 @@ public class MemberController {
 			UUID uuid = UUID.randomUUID(); // random 36자 이름 생성
 			String fileName = uuid + fileName1.substring(fileName1.lastIndexOf("."));
 			member.setFileName(fileName);
-			String real = session.getServletContext().getRealPath("/resources/fileSave");
+			String real = session.getServletContext().getRealPath("/resources/images/fileSave");
 			FileOutputStream fos = new FileOutputStream(new File(real + "/" + fileName));
 			fos.write(member.getFile().getBytes());
 			fos.close();
@@ -140,7 +140,7 @@ public class MemberController {
 			UUID uuid = UUID.randomUUID(); // random 36자 이름 생성
 			String fileName = uuid + fileName1.substring(fileName1.lastIndexOf("."));
 			member.setFileName(fileName);
-			String real = session.getServletContext().getRealPath("/resources/fileSave");
+			String real = session.getServletContext().getRealPath("/resources/images/fileSave");
 			FileOutputStream fos = new FileOutputStream(new File(real + "/" + fileName));
 			fos.write(member.getFile().getBytes());
 			fos.close();
