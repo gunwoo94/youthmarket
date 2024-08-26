@@ -2,9 +2,6 @@
 --아이디 및 권한 생성 -- 
 create user youthmarket identified by g1234;
 grant dba to youthmarket;
-SELECT *
-        FROM sell
-        WHERE sell_no = 4;
 
 --관리자 -- 
 

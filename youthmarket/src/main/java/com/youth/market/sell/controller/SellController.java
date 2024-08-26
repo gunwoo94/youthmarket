@@ -225,7 +225,7 @@ public class SellController {
 		 * null) { model.addAttribute("errorMsg", "로그인 후 이용 가능합니다."); return
 		 * "redirect:/"; } else { return "sell/sellInsertForm"; } }
 		 */
-	}
+	}	
 
 	// 상품등록
 	@PostMapping("sell/sellInsert.do")
