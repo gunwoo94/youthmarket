@@ -2,6 +2,10 @@ package com.youth.market.member.dto;
 
 import java.util.Date;
 
+import javax.swing.plaf.multi.MultiPanelUI;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,10 +25,12 @@ public class Member {
 	private String email;
 	private int count;
 	private Date createDate;
-	private String status; //가입 여부 
+	private String status; // 가입 여부
 	private int heartCount;
-	private String blackList; //블랙리스트 유무 
+	private String blackList; // 블랙리스트 유무
 	private String account;
-	private int reportCount; //신고 당한 횟수 
-
+	private int reportCount; // 신고 당한 횟수
+	private String fileName;
+	// fileUpload용
+	private MultipartFile file;
 }
