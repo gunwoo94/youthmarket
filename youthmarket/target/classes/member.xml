@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberns">
+	<select id="select" parameterType="string" resultType="member">
+		select * from member where user_id=#{userId}
+	</select>
+	<insert id="insert" parameterType="member">
+		<selectKey keyProperty="userNo" order="BEFORE" resultType="integer">
+			select nvl(max(user_no), 0) + 1 userNo from member
+		</selectKey>
+		insert into member values(#{userNo}, #{userId},#{userPassword},#{userName},#{phone},#{birth},#{email},0,sysdate,'Y',0,'N',#{account},0)
+	</insert>
+	
+</mapper>

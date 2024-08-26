@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sellns">
+	<resultMap type="sell" id="sellresult">
+		<id column="SELL_NO" property="sellNo"></id>
+		<result column="USER_NO" property="userNo"></result>
+		<result column="CATEGORY_NO" property="categoryNo"></result>
+		<result column="SELL_TITLE" property="sellTitle"></result>
+		<result column="SELL_CONTENT" property="sellContent"></result>
+		<result column="IMAGE_SELL" property="imgSell"></result>
+		<result column="COUNT" property="count"></result>
+		<result column="PRICE" property="price"></result>
+		<result column="SELL_STATUS" property="sellStatus"></result>
+		<result column="CREATE_DATE" property="createDate"></result>
+		<result column="UPDATE_DATE" property="updateDate"></result>
+		<result column="STATUS" property="status"></result>
+		<result column="HEART_NUM" property="heartNum"></result>
+		<result column="CATEGORY_NAME" property="categoryName"></result>
+	</resultMap>
+	<resultMap type="category" id="cateResult">
+		<id column="CATEGORY_NO" property="categoryNo"></id>
+		<id column="CATEGORY_NAME" property="categoryName"></id>
+	</resultMap> 
+	
+	
+    <!-- 상품 상세 조회 -->
+    <select id="getSellDetail" parameterType="int" resultMap="sellresult">
+        SELECT *
+        FROM sell
+        WHERE sell_no = #{sellNo}
+   </select>
+    
+	<!-- 상품 수정 -->
+	<update id="updateSell" parameterType="sell">
+		UPDATE SELL
+		SET
+		sell_title = #{sellTitle},
+		sell_content = #{sellContent},
+		IMAGE_SELL = #{imgSell},
+		price = #{price},
+		update_date = sysdate,
+		category_no = #{categoryNo}
+		WHERE
+		sell_no = #{sellNo}
+	</update>
+	
+	
+	<!-- 카테고리 리스트 -->
+	<select id="cateList" resultMap="cateResult">
+		SELECT CATEGORY_NO,
+		CATEGORY_NAME
+		FROM CATEGORY
+	</select>
+	
+	
+	<!-- 카테고리별 상품목록 조회 및 최신순, 인기순, 저가순, 고가순 정렬 -->
+	<select id="howOrderList" parameterType="map"
+		resultMap="sellresult">
+		<if test="categoryCode == 1">
+			SELECT
+			SELL_NO, S.CATEGORY_NO, SELL_TITLE, IMAGE_SELL, PRICE, (SELECT
+			COUNT(*) FROM
+			HEART H WHERE H.SELL_NO = S.SELL_NO) AS "HEART_NUM",
+			CATEGORY_NAME,
+			CG.CATEGORY_NAME AS "CATEGORY_NAME", S.CREATE_DATE AS
+			"CREATE_DATE"
+			FROM SELL S
+			LEFT JOIN MEMBER M ON(S.USER_NO=M.USER_NO)
+			LEFT JOIN CATEGORY CG ON(S.CATEGORY_NO=CG.CATEGORY_NO)
+			WHERE S.STATUS
+			= 'Y'
+			AND SELL_STATUS = 'Y'
+			AND M.STATUS = 'Y'
+			AND ROWNUM <![CDATA[ <= ]]>
+			80
+		</if>
+		<if test="categoryCode != 1">
+			SELECT
+			SELL_NO, S.CATEGORY_NO, SELL_TITLE, IMAGE_SELL,
+			PRICE, (SELECT COUNT(*) FROM
+			HEART H WHERE H.SELL_NO = S.SELL_NO) AS
+			"HEART_NUM", CG.CATEGORY_NAME
+			AS "CATEGORY_NAME", S.CREATE_DATE AS
+			"CREATE_DATE"
+			FROM SELL S
+			LEFT JOIN MEMBER M ON(S.USER_NO=M.USER_NO)
+			LEFT JOIN CATEGORY CG ON(S.CATEGORY_NO=CG.CATEGORY_NO)
+			WHERE S.STATUS
+			= 'Y' AND SELL_STATUS = 'Y' AND M.STATUS = 'Y'
+			AND S.CATEGORY_NO =
+			#{categoryCode}
+		</if>
+		<if test="howOrder != null">
+			ORDER BY
+			<if test='howOrder.equals("recent")'>
+				S.CREATE_DATE DESC
+			</if>
+			<if test='howOrder.equals("popular")'>
+				HEART_NUM DESC, S.COUNT DESC
+			</if>
+			<if test='howOrder.equals("lowest")'>
+				S.PRICE
+			</if>
+			<if test='howOrder.equals("high")'>
+				S.PRICE DESC
+			</if>
+		</if>
+	</select>
+
+
+	<!-- 상품삭제 -->
+	<delete id="sellDelete" parameterType="sell">
+		DELETE FROM SELL
+		WHERE
+		SELL_NO = #{sellNo}
+	</delete>
+
+	<select id="getSellNo" parameterType="string"
+		resultType="integer">
+		select * from sell where SELL_No=#{sellNo}
+	</select>
+
+
+	<!-- 상품등록 -->
+	<insert id="insert" parameterType="sell">
+		<selectKey keyProperty="sellNo" order="BEFORE"
+			resultType="integer">
+			select nvl(max(sell_no), 0) + 1 sellNo from sell
+		</selectKey>
+		INSERT INTO SELL values(
+		#{sellNo},
+		#{sellTitle} ,
+		#{sellContent},
+		#{imgSell},
+		0,
+		#{price},
+		'Y',
+		sysdate,
+		sysdate,
+		'Y',
+		0,
+		#{userNo},
+		#{categoryNo}
+		)
+	</insert>
+
+
+	<!-- 상품목록조회(메인페이지) -->
+	<select id="sellListselect" resultMap="sellresult">
+		SELECT SELL_NO,
+		CATEGORY_NO, SELL_TITLE, IMAGE_SELL, PRICE,
+		(SELECT COUNT(*) FROM HEART
+		H WHERE H.SELL_NO = S.SELL_NO) AS HEART_NUM,
+		S.CREATE_DATE
+		FROM SELL S
+		LEFT JOIN MEMBER M ON S.USER_NO = M.USER_NO
+		WHERE S.STATUS = 'Y'
+		AND
+		SELL_STATUS = 'Y'
+		AND M.STATUS = 'Y'
+		AND ROWNUM BETWEEN 1 AND 40
+	</select>
+
+
+	<!-- 상품목록조회 더 보기 -->
+	<select id="getSellList" resultMap="sellresult">
+		SELECT SELL_NO, CATEGORY_NO,
+		SELL_TITLE, IMAGE_SELL, PRICE,
+		HEART_NUM,CREATE_DATE
+		from (select ROWNUM
+		AS "R", SELL_NO, CATEGORY_NO, SELL_TITLE, IMAGE_SELL,
+		PRICE,
+		(SELECT
+		COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS
+		"HEART_NUM",S.CREATE_DATE AS "CREATE_DATE"
+		FROM SELL S
+		LEFT JOIN MEMBER
+		M ON(S.USER_NO=M.USER_NO)
+		WHERE S.STATUS = 'Y'
+		AND SELL_STATUS = 'Y'
+		AND
+		M.STATUS = 'Y')
+		where R BETWEEN #{start} AND #{start}+#{limit}-1
+	</select>
+
+
+	<!-- 상품 상세보기 -->
+	<select id="selectSellDetail" parameterType="map"
+		resultMap="sellresult">
+		SELECT SELL_NO,SELL_STATUS, SELL_TITLE, CG.CATEGORY_NAME AS
+		"CATEGORY_NAME",
+		PRICE,
+		(SELECT COUNT(*) FROM HEART H WHERE H.SELL_NO =
+		#{sellNo}) AS "HEART_NUM",
+		COUNT, CREATE_DATE, SELL_CONTENT,
+		IMAGE_SELL, S.USER_NO AS "USER_NO",
+		(SELECT COUNT(*) FROM REPORT R
+		WHERE R.REPORTED_NO = S.USER_NO AND
+		S.SELL_NO = #{sellNo}) AS
+		"REPORT_NUM",
+		(SELECT COUNT(*) FROM FOLLOW F WHERE F.FW_ID = S.USER_NO)
+		AS "FOLLOWER_NUM",
+		(SELECT COUNT(*) FROM SELL S2 WHERE S2.USER_NO =
+		S.USER_NO AND
+		S2.SELL_STATUS = 'Y') AS "SELL_NUM",
+		(SELECT COUNT(*) FROM
+		FOLLOW F WHERE F.FW_ID = S.USER_NO AND F.FL_ID =
+		#{userNo}) AS
+		"FOLLOW_IS",
+		(SELECT COUNT(*) FROM HEART H WHERE H.USER_NO = #{userNo}
+		AND H.SELL_NO =
+		S.SELL_NO) AS "HEART_IS"
+		FROM SELL S
+		JOIN CATEGORY CG ON
+		S.CATEGORY_NO = CG.CATEGORY_NO
+		WHERE S.SELL_NO = #{sellNo}
+
+	</select>
+
+
+	<!-- 이미지리스트를 만들어서 멀티파일 업로드 예정 -->
+	<insert id="insertSellImgList" parameterType="list">
+		INSERT INTO SFILE
+		SELECT SEQ_SFNO.NEXTVAL AS SFILE_NO, C.* FROM
+		(
+		<foreach collection="list" item="img" separator="UNION ALL">
+			SELECT
+			#{img.sellNo} as SELL_NO,
+			#{img.originName} as ORIGIN_NAME,
+			#{img.changeName} as CHANGE_NAME,
+			NVL(#{img.upLoadDate}, SYSDATE) as
+			UPLOAD_DATE,
+			#{img.filePath} as FILE_PATH,
+			#{img.fileType} as
+			FILE_TYPE,
+			#{img.status} as STATUS
+			FROM DUAL
+		</foreach>
+		)
+	</insert>
+
+
+
+	<!-- 이미지리스트를 만들어서 멀티파일 업로드 예정 -->
+	<select id="selectSellImgList" parameterType="hashmap"
+		resultMap="sellresult">
+		SELECT F.SFILE_NO
+		, F.SELL_NO
+		, F.ORIGIN_NAME
+		, F.CHANGE_NAME
+		,
+		F.UPLOAD_DATE
+		, F.FILE_PATH
+		, F.FILE_TYPE
+		, F.STATUS
+		FROM SELL S
+		, SFILE F
+		WHERE S.SELL_NO = F.SELL_NO
+		AND F.FILE_TYPE = 'D'
+		AND S.SELL_NO =
+		#{sellNo}
+		ORDER BY F.SFILE_NO ASC,
+		F.FILE_TYPE DESC
+	</select>
+
+
+
+</mapper>
