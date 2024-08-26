@@ -2,7 +2,7 @@
 
 /* 공통적으로 들어가는 css start */
 a { text-decoration:none !important; 
-	color:black !important;}
+	color:black;}
 
 body {
 	background: white;

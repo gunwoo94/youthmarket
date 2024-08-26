@@ -6,22 +6,21 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-	
+
 	<!-- 이건 클래스에 Service와 repository를 생성하면 그때 주석 풀어주세요! -->
-<!--  	<context:component-scan base-package="com.kh.tresure">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>   
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/> 
-		
-	</context:component-scan> -->
-<!-- 	<task:annotation-driven scheduler="FileScheduler"/>
-	<task:scheduler id="FileScheduler" pool-size="10"/> -->
+	<!-- <context:component-scan base-package="com.kh.tresure"> <context:include-filter 
+		type="annotation" expression="org.springframework.stereotype.Service"/> <context:include-filter 
+		type="annotation" expression="org.springframework.stereotype.Repository"/> 
+		</context:component-scan> -->
+	<!-- <task:annotation-driven scheduler="FileScheduler"/> <task:scheduler 
+		id="FileScheduler" pool-size="10"/> -->
 	<!-- 암호화 -->
 	<bean id="passwordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 	<!-- 파일업로드 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
-	<!--  db 사용하려면 -->
+	<!-- db 사용하려면 -->
 	<context:property-placeholder
 		location="classpath:db.properties" />
 	<!-- myBatis시작 -->
@@ -45,8 +44,27 @@
 		destroy-method="close">
 		<constructor-arg ref="hikariConfig"></constructor-arg>
 	</bean>
-	<context:component-scan base-package="com.youth.market"></context:component-scan>
-	<task:annotation-driven scheduler="FileScheduler"/>
-	<task:scheduler id="FileScheduler" pool-size="10"/>
-      
+	<context:component-scan
+		base-package="com.youth.market"></context:component-scan>
+	<task:annotation-driven
+		scheduler="FileScheduler" />
+	<task:scheduler id="FileScheduler" pool-size="10" />
+	<bean id="jMailSender"
+		class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.naver.com" />
+		<property name="port" value="465" />
+		<property name="username" value="owt0103@naver.com" />
+		<property name="password" value="test12458!" />
+		<property value="smtps" name="protocol" />
+		<property value="utf-8" name="defaultEncoding" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtps.ssl.checkserveridentity">true</prop>
+				<prop key="mail.smtps.ssl.trust">*</prop>
+				<!-- <prop key="mail.debug">true</prop> -->
+			</props>
+		</property>
+	</bean>
 </beans>
