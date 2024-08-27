@@ -21,39 +21,48 @@
 	<resultMap type="category" id="cateResult">
 		<id column="CATEGORY_NO" property="categoryNo"></id>
 		<id column="CATEGORY_NAME" property="categoryName"></id>
-	</resultMap> 
-	
-	
-    <!-- 상품 상세 조회 -->
-    <select id="getSellDetail" parameterType="int" resultMap="sellresult">
-        SELECT *
-        FROM sell
-        WHERE sell_no = #{sellNo}
-   </select>
-    
+	</resultMap>
+
+	 
+   <!-- 상품 상세조회 조회수 증가 -->
+   <update id="increaseCount" parameterType="int">
+      UPDATE SELL
+      SET COUNT = COUNT +1
+      WHERE SELL_NO = #{sellNo}
+    </update>
+   
+   
+	<!-- 상품 상세 조회 -->
+	<select id="getSellDetail" parameterType="int"
+		resultMap="sellresult">
+		SELECT *
+		FROM sell
+		WHERE sell_no = #{sellNo}
+	</select>
+
 	<!-- 상품 수정 -->
-	<update id="updateSell" parameterType="sell">
+	<update id="updateSell" parameterType="sell"> 
 		UPDATE SELL
 		SET
 		sell_title = #{sellTitle},
 		sell_content = #{sellContent},
-		IMAGE_SELL = #{imgSell},
+		IMAGE_SELL = #{imgSell, jdbcType=VARCHAR}, <!-- jdbcType을 명시적으로 설정 -->
 		price = #{price},
 		update_date = sysdate,
 		category_no = #{categoryNo}
 		WHERE
 		sell_no = #{sellNo}
 	</update>
-	
-	
+
+
 	<!-- 카테고리 리스트 -->
 	<select id="cateList" resultMap="cateResult">
 		SELECT CATEGORY_NO,
 		CATEGORY_NAME
 		FROM CATEGORY
 	</select>
-	
-	
+
+
 	<!-- 카테고리별 상품목록 조회 및 최신순, 인기순, 저가순, 고가순 정렬 -->
 	<select id="howOrderList" parameterType="map"
 		resultMap="sellresult">

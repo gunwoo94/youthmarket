@@ -1,4 +1,7 @@
 
+select * from member;
+select * from sell;
+
 --아이디 및 권한 생성 -- 
 create user youthmarket identified by g1234;
 grant dba to youthmarket;
@@ -12,7 +15,7 @@ CREATE TABLE ADMIN (
 );
 
 select * from ADMIN;
-
+select * from 
 --공지 사항 , 게시판 -- 
 
 CREATE TABLE NOTICE (
@@ -31,6 +34,8 @@ SELECT S.SELL_NO, S.SELL_STATUS, S.SELL_TITLE, CG.CATEGORY_NAME, S.PRICE
 FROM SELL S
 JOIN CATEGORY CG ON S.CATEGORY_NO = CG.CATEGORY_NO
 WHERE S.SELL_NO = 1;  
+
+
 -- 회원 정보 -- 
 drop table member cascade constraints;
 select * from member;
@@ -38,10 +43,10 @@ CREATE TABLE MEMBER (
     USER_NO       NUMBER         NOT NULL,
     USER_ID            VARCHAR2(20)   NOT NULL,
     USER_PASSWORD      VARCHAR2(100)  NOT NULL,
-    USER_NAME     VARCHAR2(100)  NULL,
-    PHONE         VARCHAR2(30)   NULL,
-    BIRTH         VARCHAR2(30)   NULL,
-    EMAIL         VARCHAR2(100)  NULL,
+    USER_NAME     VARCHAR2(100),
+    PHONE         VARCHAR2(30),
+    BIRTH         VARCHAR2(30),
+    EMAIL         VARCHAR2(100),
     COUNT         NUMBER         NOT NULL,
     CREATE_DATE   DATE           NOT NULL,
     STATUS        CHAR(1) DEFAULT 'Y',
@@ -49,6 +54,7 @@ CREATE TABLE MEMBER (
     BLACKLIST     CHAR(1) DEFAULT 'N',
     account       varchar2(20),
 	reportCount   number(10), 
+	filename      varchar2(100),
     CONSTRAINT PK_MEMBER PRIMARY KEY (USER_NO)
 );
 select * from member where user_id='k1';

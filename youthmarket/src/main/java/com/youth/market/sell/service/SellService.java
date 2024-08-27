@@ -37,6 +37,8 @@ public interface SellService {
 	//상품 업데이트
 	int updateSell(Sell s);
 	Sell getSellDetail(int sellNo);
+
+	int increaseCount(int sellNo);
 	
 
 }

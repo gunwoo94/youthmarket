@@ -46,6 +46,8 @@ public interface SellDao {
 
 	Sell getSellDetail(int sellNo);
 
+	int increaseCount(int sellNo);
+
 	
 
 

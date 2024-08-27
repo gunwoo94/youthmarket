@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.mail.Session;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -108,45 +109,46 @@ public class SellController {
 		return "sell/sellUpdateForm"; // 상품 수정 페이지로 이동
 	}
 
-	
+
+
 	// 상품 수정
 	@PostMapping("sell/sellUpdate.do")
 	public String updateSell(Sell s, Model model, HttpSession session) throws IOException {
-	    // userNo를 세션에서 가져오기 (여기서도 세션이 없을 경우 기본값 1 설정)
-	    s.setUserNo(1);
+	    Integer userNo = (Integer) session.getAttribute("userNo");
+	    s.setUserNo(userNo);
 
-	    // 이미지 경로 설정
 	    String webPath = "/resources/images/sell/";
 	    String serverFolderPath = session.getServletContext().getRealPath(webPath);
-
-	    // 업로드된 파일이 있는지 확인
+	  
 	    if (s.getUpfile() != null && !s.getUpfile().isEmpty()) {
-	        // 기존 파일 삭제 (필요 시)
+	    	  // 기존 파일 삭제 (필요 시)
 	        File oldFile = new File(serverFolderPath + s.getImgSell());
 	        if (oldFile.exists()) {
 	            oldFile.delete(); // 기존 파일 삭제
 	        }
 
-	        // 새 파일 처리
 	        String upfile1 = s.getUpfile().getOriginalFilename();
 	        UUID uuid = UUID.randomUUID(); // UUID를 생성하여 중복 방지
-	        String upfile = uuid + upfile1.substring(upfile1.lastIndexOf(".")); // 파일 이름 생성
+	        String upfile = uuid + upfile1.substring(upfile1.lastIndexOf("."));
 	        try (FileOutputStream fos = new FileOutputStream(new File(serverFolderPath + upfile))) {
 	            fos.write(s.getUpfile().getBytes()); // 파일 저장
 	        }
-	        s.setImgSell(upfile); // 새 이미지 파일 이름 설정
+	        s.setImgSell(upfile);
 	    } else {
-	        // 업로드된 파일이 없으면 기존 이미지 유지
-	        // s.setImgSell(s.getImgSell()); // 이 라인은 생략해도 됨
+	        // Map을 사용하여 sellNo 값을 전달
+	    	// 업로드된 파일이 없으면 기존 이미지를 그대로 사용
+	        // 여기서 기존의 이미지 경로를 다시 설정
+	        Map<String, Integer> paramMap = new HashMap<>();
+	        paramMap.put("sellNo", s.getSellNo());
+	        s.setImgSell(ss.selectSellDetail(paramMap).get(0).getImgSell());
 	    }
-
 	    // 데이터베이스에 업데이트 처리
-	    int result = ss.updateSell(s); // updateSell 메서드는 DAO에서 구현되어야 함
+	    int result = ss.updateSell(s);
 	    model.addAttribute("result", result);
-
-	    // 수정이 완료된 후에 리다이렉트 또는 뷰 페이지로 이동
-	    return "redirect:/sell/sellDetail/" + s.getSellNo(); // 수정된 상품의 상세 페이지로 이동
+	 // 수정이 완료된 후에 리다이렉트 또는 뷰 페이지로 이동
+	    return "redirect:/sell/sellDetail/" + s.getSellNo();
 	}
+
 
 	// 상품삭제
 	@ResponseBody
@@ -155,8 +157,11 @@ public class SellController {
 		int result = 0;
 
 		try {
+			// 세션에서 userNo 가져오기
+			Integer userNo = (Integer) session.getAttribute("userNo");
 			Sell s = new Sell();
 			s.setSellNo(sellNo);
+			s.setUserNo(userNo); // userNo를 셋팅하여 삭제 요청이 해당 사용자의 것임을 확인
 
 			ss.sellDelete(s);
 
@@ -169,14 +174,52 @@ public class SellController {
 		return result;
 	}
 
+	// 상품 자세히 보기
 	@GetMapping("sell/sellDetail/{sellNo}")
 	public String sellDetail(@PathVariable("sellNo") int sellNo, HttpSession session, HttpServletRequest req,
 			HttpServletResponse res, Model model) throws Exception {
 
+		// 세션에서 userNo 가져오기
+		Integer userNo = (Integer) session.getAttribute("userNo");
 		Map<String, Integer> map = new HashMap<>();
 		map.put("sellNo", sellNo);
-		map.put("userNo", 0); // 0 또는 다른 적절한 기본값
+		map.put("userNo", userNo); // 세션에서 가져온 userNo를 map에 추가
 		List<Sell> sellList = ss.selectSellDetail(map);
+		
+		 // 조회수 증가 로직을 추가하기 위해 쿠키 검사
+	    Cookie[] cookies = req.getCookies();
+	    Cookie viewCookie = null;
+
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if (cookie.getName().equals("cookie" + sellNo)) {
+	                viewCookie = cookie;
+	                break;
+	            }
+	        }
+	    }
+	    
+	    // viewCookie가 null일 경우 쿠키를 생성하고 조회수 증가 로직을 처리함
+	    if (viewCookie == null) {
+	        // 쿠키 생성(이름, 값)
+	        Cookie newCookie = new Cookie("cookie" + sellNo, "|" + sellNo + "|");
+	        newCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효기간을 1일로 설정
+	        newCookie.setPath("/"); // 모든 경로에서 쿠키가 유효하도록 설정
+
+	        // 쿠키 추가
+	        res.addCookie(newCookie);
+
+	        // 조회수 증가 처리
+	        int result = ss.increaseCount(sellNo);
+	        if (result > 0) {
+	            System.out.println("조회수 증가 성공");
+	        } else {
+	            System.out.println("조회수 증가 실패");
+	        }
+	    } else {
+	        // 이미 쿠키가 존재할 경우 조회수 증가 로직을 처리하지 않음
+	        System.out.println("조회수 증가 로직 생략 - 쿠키가 이미 존재함");
+	    }
 		// 리스트의 첫 번째 요소 가져오기
 		if (!sellList.isEmpty()) {
 			Sell s = sellList.get(0); // 첫 번째 Sell 객체
@@ -184,7 +227,7 @@ public class SellController {
 		} else {
 			// Handle the case where there are no results
 			model.addAttribute("errorMessage", "상품을 찾을 수 없습니다.");
-		}
+		} 
 		model.addAttribute("sellList", sellList);
 
 		return "sell/sellDetailForm";
@@ -225,16 +268,17 @@ public class SellController {
 		 * null) { model.addAttribute("errorMsg", "로그인 후 이용 가능합니다."); return
 		 * "redirect:/"; } else { return "sell/sellInsertForm"; } }
 		 */
-	}	
+	}
 
 	// 상품등록
 	@PostMapping("sell/sellInsert.do")
 	public void insertSell(Sell s, Model model, HttpSession session) throws IOException {
-		// userNo의 세션이 없어서 임의로 1넣었음.
-		s.setUserNo(1);
+		// userNo 세션
+		Integer userNo = (Integer) session.getAttribute("userNo");
+		System.out.println("userNo = " + userNo);
 		String webPath = "/resources/images/sell/";
 		String serverFolderPath = session.getServletContext().getRealPath(webPath);
-
+		s.setUserNo(userNo);
 		String upfile1 = s.getUpfile().getOriginalFilename();
 		UUID uuid = UUID.randomUUID();
 		String upfile = uuid + upfile1.substring(upfile1.lastIndexOf("."));
@@ -243,7 +287,9 @@ public class SellController {
 		fos.close();
 		s.setImgSell(upfile);
 		int result = ss.insertSell(s);
+
 		model.addAttribute("result", result);
+		model.addAttribute("userNo", userNo);
 	}
 
 }

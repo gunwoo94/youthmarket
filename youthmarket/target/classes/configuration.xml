@@ -2,6 +2,9 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-config.dtd"> 
 <configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="VARCHAR" />
+	</settings>
 	<typeAliases>
 	<!-- 이름이 너무길어서 member로 -->
 		<typeAlias alias="member" type="com.youth.market.member.dto.Member"/>
@@ -12,4 +15,7 @@
 			<mapper resource="member.xml"/>
 			<mapper resource="sell.xml"/>
 		</mappers>
+	
 </configuration>
+
+

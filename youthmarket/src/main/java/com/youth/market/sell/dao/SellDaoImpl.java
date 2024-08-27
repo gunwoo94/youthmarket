@@ -87,6 +87,13 @@ public class SellDaoImpl implements SellDao {
 		return sst.selectOne("sellns.getSellDetail",sellNo);
 	}
 	
+	//조회수 증가 
+	@Override
+	public int increaseCount(int sellNo) {
+		// TODO Auto-generated method stub
+		return sst.update("sellns.increaseCount",sellNo);
+	}
+	
 	
 
 

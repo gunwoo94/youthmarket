@@ -68,6 +68,12 @@ public class SellServiceImpl implements SellService {
 			// TODO Auto-generated method stub
 			return sd.getSellDetail(sellNo);
 		}
+		//쿠키를 사용해 조회수 증가 
+		@Override
+		public int increaseCount(int sellNo) {
+		
+			return sd.increaseCount(sellNo);
+		}
 	
 	
 	
