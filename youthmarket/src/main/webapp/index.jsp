@@ -10,7 +10,7 @@
 <body>
 <script type="text/javascript">
 	//location.href ="sell/home.do"
-	location.href ="member/insertMember.do"
+	location.href ="admin/adminLoginForm.do"
 </script>
 </body>
 </html>
