@@ -62,7 +62,7 @@
 				<br>
 			</div>
 		</c:if>
-
+		
 		<c:if test="${not empty sellList}">
 			<div id="display-list" class="row">
 				<c:forEach var="s" items="${sellList}" begin="0"

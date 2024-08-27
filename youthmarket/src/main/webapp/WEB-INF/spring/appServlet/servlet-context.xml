@@ -41,8 +41,17 @@
 		<interceptor>
 			<mapping path="/sell/sellInsertForm.do"/>
 			<mapping path="/sell/sellInsert.do"/>
-			
 			<beans:ref bean="lc"/>
+		</interceptor>
+	</interceptors>
+		<beans:bean id="ac" class="com.youth.market.admin.service.AdminLoginChk"></beans:bean>	
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/adminUser.do"/>
+			<mapping path="/admin/adminBoard.do"/>
+			<mapping path="/admin/adminNotice.do"/>
+			<mapping path="/admin/adminBlockList.do"/>
+			<beans:ref bean="ac"/>
 		</interceptor>
 	</interceptors>
 	

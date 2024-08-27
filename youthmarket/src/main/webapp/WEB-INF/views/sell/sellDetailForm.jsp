@@ -199,6 +199,7 @@
 
 							<!-- 채팅하기 버튼 -->
 							<div class="purchaseGobtnBox">
+								
 								<!-- 본인이 등록한 상품일 경우에만 수정하기, 삭제하기 버튼 보이게 -->
 								<c:if test="${sessionScope.userNo eq s.userNo}">
 									<button class="chattingbtn-sellDetail"
@@ -216,7 +217,7 @@
 								</c:if>
 
 								<!-- 거래 완료된 상품일 경우 -->
-								<c:if test="${s.sellStatus eq 'N'}">
+								<c:if test="${session eq 'N'}">
 									<button class="chattingbtn-sellDetail">거래완료된 상품입니다</button>
 								</c:if>
 							</div>

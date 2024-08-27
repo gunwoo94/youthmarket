@@ -21,4 +21,13 @@ public interface MemberDao {
 
 	int updatePassword(Member member);
 
+	int adminBlockAccept(int userNo);
+
+	int adminBlockCancel(int userNo);
+
+	int adminDelete(int userNo);
+
+	List<Member> blockList(int startRow, int endRow);
+
+	int block_count();
 }

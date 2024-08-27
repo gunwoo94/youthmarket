@@ -9,8 +9,8 @@
 </head>
 <body>
 <script type="text/javascript">
-	location.href ="sell/home.do"
-	//location.href ="admin/asminTest.do"
+	//location.href ="sell/home.do"
+	location.href ="member/insertMember.do"
 </script>
 </body>
 </html>

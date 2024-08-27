@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youth.market.admin.dto.Notice;
+import com.youth.market.admin.service.NoticeService;
 import com.youth.market.member.dto.Member;
 import com.youth.market.member.service.MailSendService;
 import com.youth.market.member.service.MemberService;
@@ -29,7 +31,8 @@ public class MemberController {
 	private MemberService ms;
 	@Autowired
 	private BCryptPasswordEncoder bpe;
-
+	@Autowired
+	private NoticeService ns;
 	private String emailChk;
 
 	// 회원 가입 페이지 화면
@@ -287,7 +290,7 @@ public class MemberController {
 
 	@GetMapping("/member/insertMember")
 	public void insertmember() {
-		for (int i = 1; i < 200; i++) {
+		for (int i = 1; i <50; i++) {
 			Member member = new Member();
 			member.setAccount("1111-" + i);
 			member.setBirth("2024-01-" + i);
@@ -295,12 +298,23 @@ public class MemberController {
 			member.setEmail("1234" + i + "@naver.com");
 			member.setPhone("010-1234-" + (1000 + i));
 			member.setUserId("k" + i);
-			member.setUserName("홍길동" + i);
+			member.setUserName("김주오" + i);
 			member.setUserPassword("1");
 			String encPass = bpe.encode(member.getUserPassword());
 			member.setUserPassword(encPass);
 			ms.insert(member);
 		}
 	}
-
+	@GetMapping("member/insertMember2")
+	public void insertmember2() {
+		for(int i = 1; i <= 10; i++ ) {
+		Notice notice = new Notice();
+		notice.setNoticeType(""+i);
+		notice.setNoticeTitle("가나" + i);
+		notice.setNoticeWriter("홍길동" + i);
+		notice.setNoticeImg("A" + i);
+		notice.setNoticeHit(i);
+		ns.insert(notice);
+		}
+	}
 }

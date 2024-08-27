@@ -7,17 +7,34 @@ create user youthmarket identified by g1234;
 grant dba to youthmarket;
 
 --관리자 -- 
+drop table admin cascade constraints;
 
 CREATE TABLE ADMIN (
     ADMIN_ID        VARCHAR2(20)  NOT NULL,
     ADMIN_PASSWORD  VARCHAR2(100) NOT NULL,
     CONSTRAINT PK_ADMIN PRIMARY KEY (ADMIN_ID)
 );
+insert into admin values(
+	'youth', '1234'
+);
 
 select * from ADMIN;
 select * from 
---공지 사항 , 게시판 -- 
-
+select * from member;
+select * from notice;
+--공지사항
+CREATE TABLE ADMIN_NOTICE (
+    NOTICE_NO      NUMBER          NOT NULL PRIMARY KEY, 
+    NOTICE_TYPE    VARCHAR2(20)    NOT NULL,
+    NOTICE_TITLE   VARCHAR2(200)   NOT NULL,
+    NOTICE_WRITER  VARCHAR2(15)    NOT NULL,
+    NOTICE_IMG     VARCHAR2(500)   NULL,
+    NOTICE_HIT     NUMBER          NULL,
+    CREATE_DATE    DATE            DEFAULT SYSDATE
+);
+--게시판 -- 
+drop table notice cascade constraints;
+drop * from table notice;
 CREATE TABLE NOTICE (
     NOTICE_NO      NUMBER          NOT NULL ,
     NOTICE_TYPE    VARCHAR2(10)    NOT NULL,
@@ -26,14 +43,8 @@ CREATE TABLE NOTICE (
     NOTICE_IMG     VARCHAR2(500)   NULL     ,
     NOTICE_HIT     NUMBER          NULL     ,
     CREATE_DATE    DATE         DEFAULT SYSDATE ,
-   
-    CONSTRAINT PK_NOTICE PRIMARY KEY (NOTICE_NO),
- 
+    CONSTRAINT PK_NOTICE PRIMARY KEY (NOTICE_NO)
 );
-SELECT S.SELL_NO, S.SELL_STATUS, S.SELL_TITLE, CG.CATEGORY_NAME, S.PRICE
-FROM SELL S
-JOIN CATEGORY CG ON S.CATEGORY_NO = CG.CATEGORY_NO
-WHERE S.SELL_NO = 1;  
 
 
 -- 회원 정보 -- 
@@ -67,6 +78,7 @@ CREATE TABLE CATEGORY (
     CONSTRAINT PK_CATEGORY PRIMARY KEY (CATEGORY_NO)
 );
 
+INSERT INTO CATEGORY\ (CATEGORY_NO, CATEGORY_NAME) VALUES (1, '인기순');
 INSERT INTO CATEGORY (CATEGORY_NO, CATEGORY_NAME) VALUES (1, '인기순');
 INSERT INTO CATEGORY (CATEGORY_NO, CATEGORY_NAME) VALUES (10, '디지털기기');
 INSERT INTO CATEGORY (CATEGORY_NO, CATEGORY_NAME) VALUES (20, '생활가전');

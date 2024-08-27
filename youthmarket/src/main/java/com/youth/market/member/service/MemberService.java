@@ -21,4 +21,13 @@ public interface MemberService {
 
 	int updatePassword(Member member);
 
+	int adminBlockAccept(int userNo);
+
+	int adminBlockCancel(int userNo);
+
+	int deleteMember(int userNo);
+
+	List<Member> blockList(int startRow, int endRow);
+
+	int block_count();
 }

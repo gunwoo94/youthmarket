@@ -51,4 +51,31 @@ public class MemberServiceImpl implements MemberService {
 		return md.updatePassword(member);
 	}
 
+	@Override
+	public int adminBlockAccept(int userNo) {
+
+		return md.adminBlockAccept(userNo);
+	}
+
+	@Override
+	public int adminBlockCancel(int userNo) {
+		return md.adminBlockCancel(userNo);
+	}
+
+	@Override
+	public int deleteMember(int userNo) {
+		return md.adminDelete(userNo);
+	}
+
+	@Override
+	public List<Member> blockList(int startRow, int endRow) {
+
+		return md.blockList(startRow, endRow);
+	}
+
+	@Override
+	public int block_count() {
+		return md.block_count();
+	}
+
 }
