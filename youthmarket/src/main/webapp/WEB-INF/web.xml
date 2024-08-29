@@ -70,10 +70,17 @@
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
+<<<<<<< HEAD
 
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>*</url-pattern>
 	</filter-mapping>
 
+=======
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>*</url-pattern>
+	</filter-mapping>
+>>>>>>> branch 'main' of https://github.com/gunwoo94/youthmarket.git
 </web-app>

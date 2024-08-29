@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youth.market.admin.dto.Notice;
+import com.youth.market.admin.service.NoticeService;
 import com.youth.market.member.dto.Member;
 import com.youth.market.member.service.MailSendService;
 import com.youth.market.member.service.MemberService;
@@ -29,15 +31,17 @@ public class MemberController {
 	private MemberService ms;
 	@Autowired
 	private BCryptPasswordEncoder bpe;
-
+	@Autowired
+	private NoticeService ns;
 	private String emailChk;
 
 	// 회원 가입 페이지 화면
 	@GetMapping("member/joinForm")
 	public void joinForm() {
 	}
-
-	// 회원가입
+	
+	
+	//회원가입
 	@PostMapping("/member/join")
 	public void join(Member member, Model model, HttpSession session) throws IOException {
 		int result = 0;
@@ -54,8 +58,15 @@ public class MemberController {
 			fos.write(member.getFile().getBytes());
 			fos.close();
 			result = ms.insert(member);
-		} else
+
+			// 회원가입이 성공하면 세션에 userNo 저장
+			if (result > 0) {
+				Member newMember = ms.select(member.getUserId());
+				session.setAttribute("userNo", newMember.getUserNo());
+			}
+		} else {
 			result = -1; // 중복된 데이터
+		}
 		model.addAttribute("result", result);
 	}
 
@@ -81,17 +92,28 @@ public class MemberController {
 	@PostMapping("/member/login")
 	public void login(Member member, Model model, HttpSession session) {
 		int result = 0;
+			
+		// 회원 정보 조회
 		Member member2 = ms.select(member.getUserId());
+
 		if (member2 != null && !member2.getStatus().equals("N")) {
+			// 비밀번호 일치 확인
 			if (bpe.matches(member.getUserPassword(), member2.getUserPassword())) {
-				result = 1; // 성공
-				session.setAttribute("userId", member.getUserId());
+				result = 1; // 로그인 성공
+
+				// 세션에 사용자 정보 저장
+				session.setAttribute("userId", member2.getUserId()); // member.getUserId() 대신 member2.getUserId()를 사용하는
+				session.setAttribute("loginUser", member);														// 것이 더 명확합니다.
 				session.setAttribute("userName", member2.getUserName());
-			} else
-				result = 0;
+				session.setAttribute("userNo", member2.getUserNo()); // userNo 추가
+
+			} else {
+				result = 0; // 비밀번호 불일치
+			}
 		} else {
-			result = -1;
+			result = -1; // 사용자 없음 또는 비활성화된 계정
 		}
+
 		model.addAttribute("result", result);
 	}
 
@@ -268,7 +290,7 @@ public class MemberController {
 
 	@GetMapping("/member/insertMember")
 	public void insertmember() {
-		for (int i = 1; i < 200; i++) {
+		for (int i = 1; i <50; i++) {
 			Member member = new Member();
 			member.setAccount("1111-" + i);
 			member.setBirth("2024-01-" + i);
@@ -276,12 +298,23 @@ public class MemberController {
 			member.setEmail("1234" + i + "@naver.com");
 			member.setPhone("010-1234-" + (1000 + i));
 			member.setUserId("k" + i);
-			member.setUserName("홍길동" + i);
+			member.setUserName("김주오" + i);
 			member.setUserPassword("1");
 			String encPass = bpe.encode(member.getUserPassword());
 			member.setUserPassword(encPass);
 			ms.insert(member);
 		}
 	}
-
+	@GetMapping("member/insertMember2")
+	public void insertmember2() {
+		for(int i = 1; i <= 10; i++ ) {
+		Notice notice = new Notice();
+		notice.setNoticeType(""+i);
+		notice.setNoticeTitle("가나" + i);
+		notice.setNoticeWriter("홍길동" + i);
+		notice.setNoticeImg("A" + i);
+		notice.setNoticeHit(i);
+		ns.insert(notice);
+		}
+	}
 }

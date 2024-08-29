@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.youth.market.member.dto.Member;
 import com.youth.market.sell.dto.Category;
 import com.youth.market.sell.dto.Review;
 import com.youth.market.sell.dto.Sell;
@@ -39,12 +40,20 @@ public interface SellDao {
 	
 	//상품 조회 최신순,최저가,최고가,오래된순 
 	List<Sell> howOrderList(HashMap<String, Object> map);
-
+	//카테고리 리스트	
 	List<Category> cateList();
-
+	// 상품 수정
 	int updateSell(Sell s);
-
+	
 	Sell getSellDetail(int sellNo);
+	//조회수 추가 
+	int increaseCount(int sellNo);
+	//상품 검색	
+	List<Sell> sellListsearch(String search);
+	//판매자 페이지로 이동
+	Map<String, Object> sellerDetail(Map<String, Integer> map);
+	//판매자의 상품 리스트 가져오기
+	List<Sell> sellList(int userNo);
 
 	
 

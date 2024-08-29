@@ -13,7 +13,7 @@
 	    if(pt == "회원 탈퇴") {
 	        let cf = confirm("정말로 탈퇴하시겠습니까?")
 	        if(cf) {
-	            location.href="delete.do"
+	            location.href="${path}/member/delete.do"
 	        } else {
 	            alert("탈퇴가 취소 되었습니다");
 	        }

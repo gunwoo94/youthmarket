@@ -61,4 +61,35 @@ public class MemberDaoImpl implements MemberDao {
 		return sst.update("memberns.updatePassword", member);
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public int adminBlockAccept(int userNo) {
+
+		return sst.update("memberns.adminBlockAccept", userNo);
+	}
+
+	@Override
+	public int adminBlockCancel(int userNo) {
+		return sst.update("memberns.adminBlockCancel", userNo);
+	}
+
+	@Override
+	public int adminDelete(int userNo) {
+		return sst.delete("memberns.adminUserDelete", userNo);
+	}
+
+	@Override
+	public List<Member> blockList(int startRow, int endRow) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("startRow", startRow);
+		map.put("endRow", endRow);
+		return sst.selectList("memberns.blockList", map);
+	}
+
+	public int block_count() {
+		return sst.selectOne("memberns.block_count");
+	}
+
+>>>>>>> branch 'main' of https://github.com/gunwoo94/youthmarket.git
 }

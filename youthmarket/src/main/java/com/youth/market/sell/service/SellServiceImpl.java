@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.youth.market.member.dto.Member;
 import com.youth.market.sell.dao.SellDao;
 import com.youth.market.sell.dto.Category;
 import com.youth.market.sell.dto.Sell;
@@ -68,8 +69,31 @@ public class SellServiceImpl implements SellService {
 			// TODO Auto-generated method stub
 			return sd.getSellDetail(sellNo);
 		}
+		//쿠키를 사용해 조회수 증가 
+		@Override
+		public int increaseCount(int sellNo) {
+		
+			return sd.increaseCount(sellNo);
+		}
+		//상품 검색 
+		@Override
+		public List<Sell> sellListsearch(String search) {
+
+			return sd.sellListsearch(search);
+		}
 	
-	
+		@Override
+		public List<Sell> sellList(int userNo) {
+			// TODO Auto-generated method stub
+			return sd.sellList(userNo);
+		}
+		@Override
+		public Map<String, Object> sellerDetail(Map<String, Integer> map) {
+			// TODO Auto-generated method stub
+			return sd.sellerDetail(map);
+		}
+		
+	 
 	
 
 }

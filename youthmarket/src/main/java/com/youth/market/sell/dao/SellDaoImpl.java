@@ -9,6 +9,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.youth.market.member.dto.Member;
 import com.youth.market.sell.dto.Category;
 import com.youth.market.sell.dto.Review;
 import com.youth.market.sell.dto.Sell;
@@ -85,6 +86,30 @@ public class SellDaoImpl implements SellDao {
 	public Sell getSellDetail(int sellNo) {
 		// TODO Auto-generated method stub
 		return sst.selectOne("sellns.getSellDetail",sellNo);
+	}
+	
+	//조회수 증가 
+	@Override
+	public int increaseCount(int sellNo) {
+		// TODO Auto-generated method stub
+		return sst.update("sellns.increaseCount",sellNo);
+	}
+	//상품 검색 
+	@Override
+	public List<Sell> sellListsearch(String search) {
+		
+		return sst.selectList("sellns.sellListsearch",search);
+	}
+
+	@Override
+	public List<Sell> sellList(int userNo) {
+		
+		return sst.selectList("sellns.sellList",userNo);
+	}
+	@Override
+	public Map<String, Object> sellerDetail(Map<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return sst.selectOne("sellns.sellerDetail",map);
 	}
 	
 	

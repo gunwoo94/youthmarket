@@ -69,11 +69,13 @@
 
 							<!-- 판매자 정보 -->
 							<div class="sellerInfo">
-								<c:set var="sellerUrl" value="" />
-								<%--  <c:if test="${loginUser.userNo != s.userNo }"> --%>
-								<c:set var="sellerUrl" value="" />
-								<%--  </c:if> --%>
-								<a href="">
+								<c:set var="sellerUrl"
+									value="${pageContext.request.contextPath }/member/myPage" />
+								<c:if test="${sessionScope.userNo != s.userNo }">
+									<c:set var="sellerUrl"
+										value="${pageContext.request.contextPath }/sell/seller/${s.userNo }" />
+								</c:if>
+								<a href="${sellerUrl }">
 									<div class="sellGradeAndNameBox">
 										<div class="sellerGradeImg">
 											<img
@@ -130,23 +132,23 @@
 									<div class="sellProductPriceText">
 										${s.price}<span>원</span>
 									</div>
-									<%-- <c:if test="${loginUser.userNo!=s.userNo }"> --%>
-									<!-- 찜하기 버튼 -->
-									<div class="right_area">
-										<a href="javascript:;"
-											class="icon heart ${s.heart_Is == 0?'':'active'}"> <!-- 찜 안되어있는 경우 -->
-											<c:if test="${s.heart_Is == 0}">
-												<img
-													src="https://cdn-icons-png.flaticon.com/512/812/812327.png"
-													alt="찜하기">
-											</c:if> <!-- 찜 되어있는 경우 --> <c:if test="${s.heart_Is != 0}">
-												<img
-													src="https://cdn-icons-png.flaticon.com/512/803/803087.png"
-													alt="찜취소">
-											</c:if>
-										</a>
-									</div>
-									<%--         </c:if> --%>
+									<c:if test="${loginUser.userNo!=s.userNo }">
+										<!-- 찜하기 버튼 -->
+										<div class="right_area">
+											<a href="javascript:;"
+												class="icon heart ${s.heart_Is == 0?'':'active'}"> <!-- 찜 안되어있는 경우 -->
+												<c:if test="${s.heart_Is == 0}">
+													<img
+														src="https://cdn-icons-png.flaticon.com/512/812/812327.png"
+														alt="찜하기">
+												</c:if> <!-- 찜 되어있는 경우 --> <c:if test="${s.heart_Is != 0}">
+													<img
+														src="https://cdn-icons-png.flaticon.com/512/803/803087.png"
+														alt="찜취소">
+												</c:if>
+											</a>
+										</div>
+									</c:if>
 								</div>
 							</div>
 							<!-- 찜수, 조회수, 몇분전 게시 출력 -->
@@ -179,19 +181,19 @@
 												<span>${s.createDate}</span>
 											</div>
 										</div>
-										<%-- <c:if test="${loginUser.userNo!=s.userNo }"> --%>
+										<c:if test="${loginUser.userNo!=s.userNo }">
 
-										<div class="sellInfoTextBox">
-											<div class="sellInfoTextBoxReport">
-												<img
-													src="https://m.bunjang.co.kr/pc-static/resource/0acf058f19649d793382.png"
-													width="16" height="16" alt="상품 몇분전 아이콘">
-												<div class="sellHeartNumText">
-													<span id="addReport" class="reportBtn">신고하기</span>
+											<div class="sellInfoTextBox">
+												<div class="sellInfoTextBoxReport">
+													<img
+														src="https://m.bunjang.co.kr/pc-static/resource/0acf058f19649d793382.png"
+														width="16" height="16" alt="상품 몇분전 아이콘">
+													<div class="sellHeartNumText">
+														<span id="addReport" class="reportBtn">신고하기</span>
+													</div>
 												</div>
 											</div>
-										</div>
-										<%--         </c:if> --%>
+										</c:if>
 									</div>
 								</div>
 							</div>
@@ -199,20 +201,29 @@
 
 							<!-- 채팅하기 버튼 -->
 							<div class="purchaseGobtnBox">
-								<%-- <c:if test="${s.sellStatus eq 'I'}"> --%>
-								<button class="chattingbtn-sellDetail"
-									onclick="sellUpdateForm(${s.sellNo})">수정하기</button>
-								<button class="chattingbtn-sellDetail"
-									onclick="deleteSellDetail(${s.sellNo});">삭제하기</button>
-								<%-- </c:if> --%>
-								<c:if test="${s.sellStatus eq 'Y'}">
-									<button class="chattingbtn-sellDetail" id="chatting-start">채
-										팅 하 기</button>
+
+								<!-- 본인이 등록한 상품일 경우에만 수정하기, 삭제하기 버튼 보이게 -->
+								<c:if test="${sessionScope.userNo eq s.userNo}">
+									<button class="chattingbtn-sellDetail"
+										onclick="sellUpdateForm(${s.sellNo})">수정하기</button>
+									<button class="chattingbtn-sellDetail"
+										onclick="deleteSellDetail(${s.sellNo});">삭제하기</button>
+
 								</c:if>
-								<c:if test="${s.sellStatus eq 'N'}">
+
+								<!-- 본인이 등록한 상품이 아닌 경우에만 채팅하기 버튼 보이게 -->
+								<c:if test="${sessionScope.userNo ne s.userNo}">
+									<c:if test="${s.sellStatus eq 'Y'}">
+										<button class="chattingbtn-sellDetail" id="chatting-start">채팅하기</button>
+									</c:if>
+								</c:if>
+
+								<!-- 거래 완료된 상품일 경우 -->
+								<c:if test="${session eq 'N'}">
 									<button class="chattingbtn-sellDetail">거래완료된 상품입니다</button>
 								</c:if>
 							</div>
+
 
 
 							<!-- 상품 설명 텍스트 -->

@@ -1,5 +1,6 @@
 package com.youth.market.sell.service;
 
+import com.youth.market.member.dto.Member;
 import com.youth.market.sell.dto.Category;
 
 import java.util.HashMap;
@@ -32,11 +33,23 @@ public interface SellService {
 	// 카테고리
 	// 상품 등록순,인기순,가격순 정렬
 	List<Sell> howOrderList(HashMap<String, Object> map);
+
 	public List<Category> cateList();
-	
-	//상품 업데이트
+
+	// 상품 업데이트
 	int updateSell(Sell s);
 	Sell getSellDetail(int sellNo);
+
+	// 상품 조회수 증가
+	int increaseCount(int sellNo);
+
+	// 상품 검색
+	List<Sell> sellListsearch(String search);
 	
+	
+	//판매자의 판매 목록 가져오기 
+	List<Sell> sellList(int userNo);
+	
+	Map<String, Object> sellerDetail(Map<String, Integer> map);
 
 }
