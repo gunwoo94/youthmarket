@@ -23,9 +23,6 @@ public interface MemberDao {
 
 	int updatePassword(Member member);
 
-<<<<<<< HEAD
-
-=======
 	int adminBlockAccept(int userNo);
 
 	int adminBlockCancel(int userNo);
@@ -35,5 +32,4 @@ public interface MemberDao {
 	List<Member> blockList(int startRow, int endRow);
 
 	int block_count();
->>>>>>> branch 'main' of https://github.com/gunwoo94/youthmarket.git
 }

@@ -9,11 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-<<<<<<< HEAD
-=======
-import javax.mail.Session;
 import javax.servlet.http.Cookie;
->>>>>>> branch 'main' of https://github.com/gunwoo94/youthmarket.git
+//github.com/gunwoo94/youthmarket.git
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youth.market.member.dto.Member;
 import com.youth.market.sell.dto.Category;
 import com.youth.market.sell.dto.Sell;
 import com.youth.market.sell.service.SellService;
@@ -37,61 +35,55 @@ public class SellController {
 	@Autowired
 	private SellService ss;
 
-
-	//상품 자세히보기에서 - 판매자 페이지로 이동 
+	// 상품 자세히보기에서 - 판매자 페이지로 이동
 	@GetMapping("sell/seller/{userNo}")
-	public String sellerPage(
-	        @PathVariable("userNo") int userNo, 
-	        Model model, 
-	        HttpSession session) {
+	public String sellerPage(@PathVariable("userNo") int userNo, Model model, HttpSession session) {
 
-	    // 로그인한 사용자 정보
-	    Member member = (Member) session.getAttribute("loginUser");
+		// 로그인한 사용자 정보
+		Member member = (Member) session.getAttribute("loginUser");
 
-	    // 판매자 정보 가져오기
-	    Map<String, Integer> map = new HashMap<>();
-	    map.put("sellerNo", userNo);
-	    
-	    
-	    // 로그인한 사용자의 userNo를 추가 (로그인 했을 때)
-	    if (member != null) {
-	        map.put("userNo", member.getUserNo());
-	    }
+		// 판매자 정보 가져오기
+		Map<String, Integer> map = new HashMap<>();
+		map.put("sellerNo", userNo);
 
-	    // 판매자 상세 정보
-	    model.addAttribute("member", ss.sellerDetail(map));
+		// 로그인한 사용자의 userNo를 추가 (로그인 했을 때)
+		if (member != null) {
+			map.put("userNo", member.getUserNo());
+		}
 
-	    // 판매 리스트
-	    model.addAttribute("sellList", ss.sellList(userNo));
+		// 판매자 상세 정보
+		model.addAttribute("member", ss.sellerDetail(map));
 
-	    // 판매자 페이지 뷰 반환
-	    return "sell/sellerPage";
+		// 판매 리스트
+		model.addAttribute("sellList", ss.sellList(userNo));
+
+		// 판매자 페이지 뷰 반환
+		return "sell/sellerPage";
 	}
 
-	//상품 검색
+	// 상품 검색
 	@PostMapping("sell/search")
-	public String searchList(
-	    Model model, 
-	    @RequestParam String search // POST 요청이므로 @RequestParam 사용
+	public String searchList(Model model, @RequestParam String search // POST 요청이므로 @RequestParam 사용
 	) {
-	    // 상품 검색일 경우
-	    List<Sell> sList = ss.sellListsearch(search);
+		// 상품 검색일 경우
+		List<Sell> sList = ss.sellListsearch(search);
 
-	    // 상품 생성 시간 처리
-	    sList.forEach(sell -> sell.setTimeago(sell.getCreateDate()));
+		// 상품 생성 시간 처리
+		sList.forEach(sell -> sell.setTimeago(sell.getCreateDate()));
 
-	    // 모델에 데이터 추가
-	    model.addAttribute("sList", sList);
-	    model.addAttribute("keyword", search);
+		// 모델에 데이터 추가
+		model.addAttribute("sList", sList);
+		model.addAttribute("keyword", search);
 
-	    // 반환할 뷰의 이름
-	    return "sell/searchList";
+		// 반환할 뷰의 이름
+		return "sell/searchList";
 	}
 
 	@GetMapping("sell/Gocategory.do")
 	public void Gocategory() {
 
 	}
+
 	// 카테고리 인기순,최근순,가격순 정렬
 	@GetMapping("sell/category/{categoryCode}/{how}")
 	public String orderHow(@PathVariable("categoryCode") int categoryCode, @PathVariable("how") String howOrder,
@@ -153,46 +145,43 @@ public class SellController {
 		return "sell/sellUpdateForm"; // 상품 수정 페이지로 이동
 	}
 
-
-
 	// 상품 수정
 	@PostMapping("sell/sellUpdate.do")
 	public String updateSell(Sell s, Model model, HttpSession session) throws IOException {
-	    Integer userNo = (Integer) session.getAttribute("userNo");
-	    s.setUserNo(userNo);
+		Integer userNo = (Integer) session.getAttribute("userNo");
+		s.setUserNo(userNo);
 
-	    String webPath = "/resources/images/sell/";
-	    String serverFolderPath = session.getServletContext().getRealPath(webPath);
-	  
-	    if (s.getUpfile() != null && !s.getUpfile().isEmpty()) {
-	    	  // 기존 파일 삭제 (필요 시)
-	        File oldFile = new File(serverFolderPath + s.getImgSell());
-	        if (oldFile.exists()) {
-	            oldFile.delete(); // 기존 파일 삭제
-	        }
+		String webPath = "/resources/images/sell/";
+		String serverFolderPath = session.getServletContext().getRealPath(webPath);
 
-	        String upfile1 = s.getUpfile().getOriginalFilename();
-	        UUID uuid = UUID.randomUUID(); // UUID를 생성하여 중복 방지
-	        String upfile = uuid + upfile1.substring(upfile1.lastIndexOf("."));
-	        try (FileOutputStream fos = new FileOutputStream(new File(serverFolderPath + upfile))) {
-	            fos.write(s.getUpfile().getBytes()); // 파일 저장
-	        }
-	        s.setImgSell(upfile);
-	    } else {
-	        // Map을 사용하여 sellNo 값을 전달
-	    	// 업로드된 파일이 없으면 기존 이미지를 그대로 사용
-	        // 여기서 기존의 이미지 경로를 다시 설정
-	        Map<String, Integer> paramMap = new HashMap<>();
-	        paramMap.put("sellNo", s.getSellNo());
-	        s.setImgSell(ss.selectSellDetail(paramMap).get(0).getImgSell());
-	    }
-	    // 데이터베이스에 업데이트 처리
-	    int result = ss.updateSell(s);
-	    model.addAttribute("result", result);
-	 // 수정이 완료된 후에 리다이렉트 또는 뷰 페이지로 이동
-	    return "redirect:/sell/sellDetail/" + s.getSellNo();
+		if (s.getUpfile() != null && !s.getUpfile().isEmpty()) {
+			// 기존 파일 삭제 (필요 시)
+			File oldFile = new File(serverFolderPath + s.getImgSell());
+			if (oldFile.exists()) {
+				oldFile.delete(); // 기존 파일 삭제
+			}
+
+			String upfile1 = s.getUpfile().getOriginalFilename();
+			UUID uuid = UUID.randomUUID(); // UUID를 생성하여 중복 방지
+			String upfile = uuid + upfile1.substring(upfile1.lastIndexOf("."));
+			try (FileOutputStream fos = new FileOutputStream(new File(serverFolderPath + upfile))) {
+				fos.write(s.getUpfile().getBytes()); // 파일 저장
+			}
+			s.setImgSell(upfile);
+		} else {
+			// Map을 사용하여 sellNo 값을 전달
+			// 업로드된 파일이 없으면 기존 이미지를 그대로 사용
+			// 여기서 기존의 이미지 경로를 다시 설정
+			Map<String, Integer> paramMap = new HashMap<>();
+			paramMap.put("sellNo", s.getSellNo());
+			s.setImgSell(ss.selectSellDetail(paramMap).get(0).getImgSell());
+		}
+		// 데이터베이스에 업데이트 처리
+		int result = ss.updateSell(s);
+		model.addAttribute("result", result);
+		// 수정이 완료된 후에 리다이렉트 또는 뷰 페이지로 이동
+		return "redirect:/sell/sellDetail/" + s.getSellNo();
 	}
-
 
 	// 상품삭제
 	@ResponseBody
@@ -229,41 +218,41 @@ public class SellController {
 		map.put("sellNo", sellNo);
 		map.put("userNo", userNo); // 세션에서 가져온 userNo를 map에 추가
 		List<Sell> sellList = ss.selectSellDetail(map);
-		
-		 // 조회수 증가 로직을 추가하기 위해 쿠키 검사
-	    Cookie[] cookies = req.getCookies();
-	    Cookie viewCookie = null;
 
-	    if (cookies != null) {
-	        for (Cookie cookie : cookies) {
-	            if (cookie.getName().equals("cookie" + sellNo)) {
-	                viewCookie = cookie;
-	                break;
-	            }
-	        }
-	    }
-	    
-	    // viewCookie가 null일 경우 쿠키를 생성하고 조회수 증가 로직을 처리함
-	    if (viewCookie == null) {
-	        // 쿠키 생성(이름, 값)
-	        Cookie newCookie = new Cookie("cookie" + sellNo, "|" + sellNo + "|");
-	        newCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효기간을 1일로 설정
-	        newCookie.setPath("/"); // 모든 경로에서 쿠키가 유효하도록 설정
+		// 조회수 증가 로직을 추가하기 위해 쿠키 검사
+		Cookie[] cookies = req.getCookies();
+		Cookie viewCookie = null;
 
-	        // 쿠키 추가
-	        res.addCookie(newCookie);
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("cookie" + sellNo)) {
+					viewCookie = cookie;
+					break;
+				}
+			}
+		}
 
-	        // 조회수 증가 처리
-	        int result = ss.increaseCount(sellNo);
-	        if (result > 0) {
-	            System.out.println("조회수 증가 성공");
-	        } else {
-	            System.out.println("조회수 증가 실패");
-	        }
-	    } else {
-	        // 이미 쿠키가 존재할 경우 조회수 증가 로직을 처리하지 않음
-	        System.out.println("조회수 증가 로직 생략 - 쿠키가 이미 존재함");
-	    }
+		// viewCookie가 null일 경우 쿠키를 생성하고 조회수 증가 로직을 처리함
+		if (viewCookie == null) {
+			// 쿠키 생성(이름, 값)
+			Cookie newCookie = new Cookie("cookie" + sellNo, "|" + sellNo + "|");
+			newCookie.setMaxAge(60 * 60 * 24); // 쿠키 유효기간을 1일로 설정
+			newCookie.setPath("/"); // 모든 경로에서 쿠키가 유효하도록 설정
+
+			// 쿠키 추가
+			res.addCookie(newCookie);
+
+			// 조회수 증가 처리
+			int result = ss.increaseCount(sellNo);
+			if (result > 0) {
+				System.out.println("조회수 증가 성공");
+			} else {
+				System.out.println("조회수 증가 실패");
+			}
+		} else {
+			// 이미 쿠키가 존재할 경우 조회수 증가 로직을 처리하지 않음
+			System.out.println("조회수 증가 로직 생략 - 쿠키가 이미 존재함");
+		}
 		// 리스트의 첫 번째 요소 가져오기
 		if (!sellList.isEmpty()) {
 			Sell s = sellList.get(0); // 첫 번째 Sell 객체
@@ -271,7 +260,7 @@ public class SellController {
 		} else {
 			// Handle the case where there are no results
 			model.addAttribute("errorMessage", "상품을 찾을 수 없습니다.");
-		} 
+		}
 		model.addAttribute("sellList", sellList);
 
 		return "sell/sellDetailForm";

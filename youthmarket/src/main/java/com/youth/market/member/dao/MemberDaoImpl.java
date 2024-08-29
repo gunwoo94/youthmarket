@@ -61,8 +61,6 @@ public class MemberDaoImpl implements MemberDao {
 		return sst.update("memberns.updatePassword", member);
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public int adminBlockAccept(int userNo) {
 
@@ -91,5 +89,4 @@ public class MemberDaoImpl implements MemberDao {
 		return sst.selectOne("memberns.block_count");
 	}
 
->>>>>>> branch 'main' of https://github.com/gunwoo94/youthmarket.git
 }
