@@ -27,6 +27,10 @@
 		resultMap="memberResult">
 		select * from member where EMAIL=#{email}
 	</select>
+	<select id="selectRP" parameterType="string"
+		resultMap="memberResult">
+		select * from member where USER_NAME=#{userName}
+	</select>
 	<insert id="insert" parameterType="member">
 		<selectKey keyProperty="userNo" order="BEFORE"
 			resultType="integer">

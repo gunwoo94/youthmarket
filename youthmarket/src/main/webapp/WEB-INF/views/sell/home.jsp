@@ -35,7 +35,7 @@
 	</c:if> --%>
 
 	<div class="main-section">
-		<c:if test="${empty sellList}">
+		<%-- <c:if test="${empty sellList}">
 			<div id="displayHeader">
 				<p class="main-Title">
 					<b style="padding-left: 45%;"><img
@@ -48,7 +48,7 @@
 
 				<br>
 			</div>
-		</c:if>
+		</c:if> --%>
 		<c:if test="${empty sellList}">
 			<div id="displayHeader">
 				<p class="main-Title">
@@ -65,10 +65,10 @@
 
 		<c:if test="${not empty sellList}">
 			<div id="display-list" class="row">
-				<c:forEach var="s" items="${sellList}" begin="0"
-					end="9" step="1" varStatus="status">
+				<c:forEach var="s" items="${sellList}" begin="0" end="9" step="1"
+					varStatus="status">
 					<div class="item col-3">
-							<div class="item" onclick="sellDetail(${s.sellNo})">
+						<div class="item" onclick="sellDetail(${s.sellNo})">
 							<div id="itemSolid" class="slist-items">
 								<img src="${path}/resources/images/sell/${s.imgSell}"
 									width="100%" height="150px;" class="rounded float-start" alt="">
@@ -89,14 +89,14 @@
 		</c:if>
 	</div>
 
-		<br>
-		<div id="moreShow">
-			<button class="TheBogiBtn" onclick="theBogi();" style="margin: auto;">더보기</button>
-		</div>
-		<div id="theBogi_body"></div>
+	<br>
+	<div id="moreShow">
+		<button class="TheBogiBtn" onclick="theBogi();" style="margin: auto;">더보기</button>
+	</div>
+	<div id="theBogi_body"></div>
 
 
-		<script>
+	<script>
 		function sellDetail(sellNo){
 			location.href = "${pageContext.request.contextPath}/sell/sellDetail/"+sellNo;
 		} 

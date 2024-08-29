@@ -9,10 +9,9 @@
 <style type="text/css">
 * {
 	text-align: center;
-	
 }
 
-.text-wrap{
+.text-wrap {
 	margin-bottom: 15px;
 }
 
@@ -21,7 +20,6 @@
 }
 </style>
 <script type="text/javascript">
-
 	function chk() {
 		if (frm.userPassword.value != frm.userPassword2.value) {
 			$('#passChk-msg').html('암호와 암호 확인이 다릅니다');

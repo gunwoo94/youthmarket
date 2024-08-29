@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.youth.market.member.dto.Member;
 
-
 @Repository
 public class MemberDaoImpl implements MemberDao {
 	@Autowired
@@ -23,6 +22,11 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public Member selectEmail(String email) {
 		return sst.selectOne("memberns.selectEmail", email);
+	}
+
+	@Override
+	public Member selectRP(String userName) {
+		return sst.selectOne("memberns.selectRP", userName);
 	}
 
 	public int insert(Member member) {
@@ -56,6 +60,5 @@ public class MemberDaoImpl implements MemberDao {
 	public int updatePassword(Member member) {
 		return sst.update("memberns.updatePassword", member);
 	}
-
 
 }

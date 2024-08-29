@@ -9,13 +9,13 @@
 <body>
 <c:if test="${result > 0 }">
 	<script type="text/javascript">
-		alert("회원 가입 되었습니다");
+		alert("회원 가입에 성공했습니다");
 		location.href="${path}/member/loginForm.do"
 	</script>
 </c:if>
 <c:if test="${result == 0 }">
 	<script type="text/javascript">
-		alert("회원 가입이 안됐습니다. 확인해 보세요");
+		alert("회원 가입에 실패했습니다.");
 		history.back()
 	</script>
 </c:if>

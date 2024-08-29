@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-어드님이야
+어드민이야
 </body>
 </html>

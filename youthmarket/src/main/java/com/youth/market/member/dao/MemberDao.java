@@ -9,6 +9,8 @@ public interface MemberDao {
 
 	Member selectEmail(String email);
 
+	Member selectRP(String userName);
+
 	int insert(Member member);
 
 	List<Member> memberList(int startRow, int endRow);
@@ -20,5 +22,6 @@ public interface MemberDao {
 	int delete(String userId);
 
 	int updatePassword(Member member);
+
 
 }

@@ -16,7 +16,7 @@
 	</c:if>
 	<c:if test="${result == -1}">
 		<script type="text/javascript">
-			alert("변경 실패");
+			alert("비밀번호 변경에 실패했습니다");
 			history.back();
 		</script>
 	</c:if>

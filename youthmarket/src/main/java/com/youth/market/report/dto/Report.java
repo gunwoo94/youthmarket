@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class Report {
 
 	private int reportNo;
-	private int reporterNo;
-	private int reportedNo;
 	private String reportContent;
 	private Date createDate;
 	private String status;
+	private int reporterNo;
+	private int reportedNo;
 	
 	//신고당한 전체 횟수
 	private int reportCount;

@@ -10,13 +10,19 @@
 <body>
 	<c:if test="${result > 0 }">
 		<script type="text/javascript">
-			alert("프로필 사진이 수정 되었습니다");
-			location.href = "${path}/member/mypage.do"
+			alert("입력하신 상점명으로 검색을 시작합니다")
+			location.href = "${path}/report/reportSearchResult.do?userName=${member.userName}"
 		</script>
 	</c:if>
 	<c:if test="${result == 0 }">
 		<script type="text/javascript">
-			alert("프로필 사진 수정에 실패했습니다.");
+			alert("오류입니다")
+			history.back()
+		</script>
+	</c:if>
+	<c:if test="${result < 0 }">
+		<script type="text/javascript">
+			alert("입력하신 상점명은 존재하지 않습니다")
 			history.back()
 		</script>
 	</c:if>

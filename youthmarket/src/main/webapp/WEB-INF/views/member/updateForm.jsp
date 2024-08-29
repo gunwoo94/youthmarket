@@ -41,7 +41,7 @@
 						required="required" class="form-control"></td>
 				</tr>
 				<tr>
-					<th>이름 <i class="bi bi-person-vcard"></i></th>
+					<th>상점명 <i class="bi bi-person-vcard"></i></th>
 					<td><input type="text" name="userName" required="required"
 						class="form-control" value="${member.userName }"></td>
 				</tr>

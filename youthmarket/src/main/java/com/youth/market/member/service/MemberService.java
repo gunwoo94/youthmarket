@@ -11,6 +11,8 @@ public interface MemberService {
 
 	int insert(Member member);
 
+	Member selectRP(String userName);
+
 	List<Member> memberList(int startRow, int endRow);
 
 	int count();

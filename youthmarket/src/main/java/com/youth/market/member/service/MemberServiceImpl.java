@@ -22,6 +22,11 @@ public class MemberServiceImpl implements MemberService {
 		return md.selectEmail(email);
 	}
 
+	@Override
+	public Member selectRP(String userName) {
+		return md.selectRP(userName);
+	}
+
 	public int insert(Member member) {
 		return md.insert(member);
 	}

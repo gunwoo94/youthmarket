@@ -38,6 +38,7 @@ WHERE S.SELL_NO = 1;
 -- 회원 정보 -- 
 drop table member cascade constraints;
 select * from member;
+update member set reportCount = '3' where user_id = 'k1';
 CREATE TABLE MEMBER (
     USER_NO       NUMBER         NOT NULL,
     USER_ID            VARCHAR2(20)   NOT NULL,
@@ -59,7 +60,7 @@ CREATE TABLE MEMBER (
 select * from member where user_id='k1';
 
 --카테 고리 --
-
+         
 CREATE TABLE CATEGORY (
     CATEGORY_NO    NUMBER        NOT NULL,
     CATEGORY_NAME  VARCHAR2(100) NOT NULL,
@@ -97,7 +98,7 @@ CREATE TABLE SELL (
         CONSTRAINT FK_MEMBER_TO_SELL FOREIGN KEY (USER_NO) REFERENCES MEMBER(USER_NO),
     CONSTRAINT FK_CATEGORY_TO_SELL FOREIGN KEY (CATEGORY_NO) REFERENCES CATEGORY(CATEGORY_NO)
 );
-
+select * from sell;
 
 --게시글 첨부파일 --
 
@@ -265,7 +266,7 @@ CREATE TABLE CFILE (
 -- 신고 하기 
 CREATE TABLE REPORT (
     REPORT_NO      NUMBER        NOT NULL ,
-    REPORT_CONENT  VARCHAR2(4000) NOT NULL,
+    REPORT_CONTENT  VARCHAR2(4000) NOT NULL,
     CREATE_DATE    DATE          DEFAULT SYSDATE ,
     STATUS         CHAR(1)         DEFAULT 'Y' ,
     REPORTER_NO    NUMBER        NOT NULL ,
@@ -276,4 +277,5 @@ CREATE TABLE REPORT (
     
 );
 
+drop table REPORT;
 

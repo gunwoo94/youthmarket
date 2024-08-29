@@ -15,7 +15,7 @@
 </c:if>
 <c:if test="${result == 0 }">
 	<script type="text/javascript">
-		alert("상품등룍에 실패 하였습니다.");
+		alert("상품등록에 실패 하였습니다.");
 		history.back()
 	</script>
 </c:if>

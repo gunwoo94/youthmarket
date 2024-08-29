@@ -87,11 +87,11 @@
 							</a></li>
 
 							<li><a
-								href="${pageContext.request.contextPath}/report/reportSearch"><img
+								href="${pageContext.request.contextPath}/report/reportSearchForm.do"><img
 									src="/youthmarket/resources/images/icon/사기조회.png"
 									alt="사기조회 이미지">사기조회</a></li>
 							<li><a
-								href="${pageContext.request.contextPath}/member/myPage"
+								href="${pageContext.request.contextPath}/mypage/mypage"
 								class="checkUserNo"><img
 									src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
 						</ul>
