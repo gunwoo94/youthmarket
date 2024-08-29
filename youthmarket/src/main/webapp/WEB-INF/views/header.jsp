@@ -30,17 +30,20 @@
 						enctype="multipart/form-data" method="post">
 						<div class="search1">
 							<div class="search2">
-								<input onclick="checkInput(this.form)" type="text" id="search"
-									class="search3" placeholder=" 상품명 , @상점명 입력해주세요" name="search">
-								<img onclick="test()" class="exx" id="exit"
+								<input type="text" id="search" class="search3"
+									placeholder="상품명을 입력해주세요" name="search"> <img
+									onclick="document.getElementById('search').value='';"
+									class="exx" id="exit"
 									src="/youthmarket/resources/images/icon/x.png" width="30px"
-									height="30px" alt="검색어 삭제 버튼 아이콘"> <a class="searchicon">
-									<img src="/youthmarket/resources/images/icon/search.png"
+									height="30px" alt="검색어 삭제 버튼 아이콘"> <img
+									onclick="document.getElementById('sfm').submit();"
+									class="searchicon"
+									src="/youthmarket/resources/images/icon/search.png"
 									width="30px" height="30px" alt="검색 버튼 아이콘" id="searchGO">
-								</a>
 							</div>
 						</div>
 					</form>
+
 
 					<div class="etIgxm">
 						<!-- 본인인증 방법 로그인 O && 카카오로그인 X && 네이버 로그인 X -->
@@ -86,16 +89,16 @@
 								href="${pageContext.request.contextPath}/report/reportSearch"><img
 									src="/youthmarket/resources/images/icon/사기조회.png"
 									alt="사기조회 이미지">사기조회</a></li>
-							<li>
-							<c:if test="${sessionScope.userId != null}">
-							<a href="${path }/mypage/mypage.do" class="checkUserNo"><img
-									src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
+							<li><c:if test="${sessionScope.userId != null}">
+									<a href="${path }/mypage/mypage.do" class="checkUserNo"><img
+										src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
 							</c:if>
 							<c:if test="${sessionScope.userId == null}">
-							<a href="${path }/member/loginForm.do" class="checkUserNo"><img
-									src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
+								<a href="${path }/member/loginForm.do" class="checkUserNo"><img
+									src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a>
+								</li>
 							</c:if>
-						
+
 						</ul>
 					</div>
 				</div>

@@ -17,21 +17,103 @@
 		<result column="STATUS" property="status"></result>
 		<result column="HEART_NUM" property="heartNum"></result>
 		<result column="CATEGORY_NAME" property="categoryName"></result>
+		<result column="REPORT_NUM" property="report_Num"></result>
+		<result column="FOLLOWER_NUM" property="follower_Num"></result>
+		<result column="SELL_NUM" property="sell_Num"></result>
+		<result column="FOLLOW_IS" property="follow_Is"></result>
+		<result column="HEART_IS" property="heart_Is"></result>
+
+		<result column="REV_IS" property="rev_is"></result>
+
+
 	</resultMap>
 	<resultMap type="category" id="cateResult">
 		<id column="CATEGORY_NO" property="categoryNo"></id>
 		<id column="CATEGORY_NAME" property="categoryName"></id>
 	</resultMap>
 
-	 
-   <!-- 상품 상세조회 조회수 증가 -->
-   <update id="increaseCount" parameterType="int">
-      UPDATE SELL
-      SET COUNT = COUNT +1
-      WHERE SELL_NO = #{sellNo}
-    </update>
-   
-   
+	<resultMap id="seller" type="hashmap">
+      <result column="USER_NO" property="userNo" />
+      <result column="MARKET_OPEN" property="marketOpen" />
+      <result column="SELL_COUNT" property="sellCount" />
+      <result column="FOLLOW_COUNT" property="followCount" />
+      <result column="REPORT_COUNT" property="reportCount" />
+      <result column="REVIEW_AVG" property="reviewAvg" />
+      <result column="IS_FOLLOW" property="isFollow" />
+      <result column="filename" property="fileName" />
+   </resultMap>
+
+
+   <select id="sellList" parameterType="int" resultMap="sellresult">
+      SELECT SELL_NO
+           , CATEGORY_NO
+           , SELL_TITLE
+           , IMAGE_SELL
+           , PRICE
+           , (SELECT COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS HEART_NUM
+           , SELL_STATUS
+           , CREATE_DATE
+           , SELL_STATUS
+        FROM SELL S
+       WHERE USER_NO = #{userNo}  AND STATUS = 'Y'
+   </select>
+
+
+
+	<!-- 상점 정보 조회 -->
+	<!-- 판매자 상세 정보 조회 -->
+	<select id="sellerDetail" parameterType="hashmap"
+		resultMap="seller">
+		SELECT M.USER_NO,M.FILENAME,
+		ROUND(SYSDATE - M.CREATE_DATE) AS MARKET_OPEN,
+		(SELECT COUNT(*) FROM SELL WHERE USER_NO = M.USER_NO) AS SELL_COUNT,
+		(SELECT COUNT(*) FROM FOLLOW WHERE FW_ID = M.USER_NO) AS FOLLOW_COUNT,
+		(SELECT COUNT(*) FROM REPORT WHERE REPORTED_NO = M.USER_NO) AS
+		REPORT_COUNT,
+		(SELECT NVL(AVG(REV_SCORE), 0) FROM SELL S, REVIEW R
+		WHERE S.SELL_NO = R.SELL_NO AND S.USER_NO = M.USER_NO) AS REVIEW_AVG,
+		(SELECT COUNT(*) FROM FOLLOW WHERE FL_ID = M.USER_NO AND FW_ID =
+		#{fwId}) AS IS_FOLLOW
+		<if test="userNo != null">
+			,(SELECT COUNT(*) FROM FOLLOW WHERE FL_ID = #{userNo} AND FW_ID = M.USER_NO)
+			AS IS_FOLLOW
+		</if>
+		FROM MEMBER M
+		WHERE M.USER_NO = #{sellerNo}
+	</select>
+
+
+
+
+	<!-- 상품검색 -->
+	<select id="sellListsearch" parameterType="String"
+		resultMap="sellresult">
+		SELECT
+		SELL_NO, CATEGORY_NO, SELL_TITLE, IMAGE_SELL, PRICE,
+		(SELECT COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS
+		HEART_NUM,
+		S.CREATE_DATE AS CREATE_DATE
+		FROM SELL S
+		LEFT JOIN MEMBER M ON
+		S.USER_NO = M.USER_NO
+		WHERE S.STATUS = 'Y'
+		AND SELL_STATUS = 'Y'
+		AND
+		M.STATUS = 'Y'
+		AND SELL_TITLE LIKE '%${search}%'
+	</select>
+
+
+
+	<!-- 상품 상세조회 조회수 증가 -->
+	<update id="increaseCount" parameterType="int">
+		UPDATE SELL
+		SET COUNT =
+		COUNT +1
+		WHERE SELL_NO = #{sellNo}
+	</update>
+
+
 	<!-- 상품 상세 조회 -->
 	<select id="getSellDetail" parameterType="int"
 		resultMap="sellresult">
@@ -41,7 +123,7 @@
 	</select>
 
 	<!-- 상품 수정 -->
-	<update id="updateSell" parameterType="sell"> 
+	<update id="updateSell" parameterType="sell">
 		UPDATE SELL
 		SET
 		sell_title = #{sellTitle},

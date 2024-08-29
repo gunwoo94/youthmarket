@@ -43,11 +43,61 @@ public class SellController {
 	@Autowired
 	private SellService ss;
 
+
+	//상품 자세히보기에서 - 판매자 페이지로 이동 
+	@GetMapping("sell/seller/{userNo}")
+	public String sellerPage(
+	        @PathVariable("userNo") int userNo, 
+	        Model model, 
+	        HttpSession session) {
+
+	    // 로그인한 사용자 정보
+	    Member member = (Member) session.getAttribute("loginUser");
+
+	    // 판매자 정보 가져오기
+	    Map<String, Integer> map = new HashMap<>();
+	    map.put("sellerNo", userNo);
+	    
+	    
+	    // 로그인한 사용자의 userNo를 추가 (로그인 했을 때)
+	    if (member != null) {
+	        map.put("userNo", member.getUserNo());
+	    }
+
+	    // 판매자 상세 정보
+	    model.addAttribute("member", ss.sellerDetail(map));
+
+	    // 판매 리스트
+	    model.addAttribute("sellList", ss.sellList(userNo));
+
+	    // 판매자 페이지 뷰 반환
+	    return "sell/sellerPage";
+	}
+
+	//상품 검색
+	@PostMapping("sell/search")
+	public String searchList(
+	    Model model, 
+	    @RequestParam String search // POST 요청이므로 @RequestParam 사용
+	) {
+	    // 상품 검색일 경우
+	    List<Sell> sList = ss.sellListsearch(search);
+
+	    // 상품 생성 시간 처리
+	    sList.forEach(sell -> sell.setTimeago(sell.getCreateDate()));
+
+	    // 모델에 데이터 추가
+	    model.addAttribute("sList", sList);
+	    model.addAttribute("keyword", search);
+
+	    // 반환할 뷰의 이름
+	    return "sell/searchList";
+	}
+
 	@GetMapping("sell/Gocategory.do")
 	public void Gocategory() {
 
 	}
-
 	// 카테고리 인기순,최근순,가격순 정렬
 	@GetMapping("sell/category/{categoryCode}/{how}")
 	public String orderHow(@PathVariable("categoryCode") int categoryCode, @PathVariable("how") String howOrder,

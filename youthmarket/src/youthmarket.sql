@@ -143,7 +143,9 @@ CREATE TABLE PURCHASE (
   	CONSTRAINT FK_MEMBER_TO_PURCHASE FOREIGN KEY (USER_NO) REFERENCES MEMBER(USER_NO) 
 );
 
-
+select * from member where user_id='k1';
+select 'k'||user_no from member;
+updtae member m1 set user_id = (select 'k'||user_no from member M2) WHERE M1.USER_NO=M2.USER_NO; 
 -- 리뷰 --
 
 CREATE TABLE REVIEW (

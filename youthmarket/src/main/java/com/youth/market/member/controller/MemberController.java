@@ -92,7 +92,7 @@ public class MemberController {
 	@PostMapping("/member/login")
 	public void login(Member member, Model model, HttpSession session) {
 		int result = 0;
-
+			
 		// 회원 정보 조회
 		Member member2 = ms.select(member.getUserId());
 
@@ -103,7 +103,7 @@ public class MemberController {
 
 				// 세션에 사용자 정보 저장
 				session.setAttribute("userId", member2.getUserId()); // member.getUserId() 대신 member2.getUserId()를 사용하는
-																		// 것이 더 명확합니다.
+				session.setAttribute("loginUser", member);														// 것이 더 명확합니다.
 				session.setAttribute("userName", member2.getUserName());
 				session.setAttribute("userNo", member2.getUserNo()); // userNo 추가
 

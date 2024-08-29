@@ -69,11 +69,13 @@
 
 							<!-- 판매자 정보 -->
 							<div class="sellerInfo">
-								<c:set var="sellerUrl" value="" />
-								<%--  <c:if test="${loginUser.userNo != s.userNo }"> --%>
-								<c:set var="sellerUrl" value="" />
-								<%--  </c:if> --%>
-								<a href="">
+								<c:set var="sellerUrl"
+									value="${pageContext.request.contextPath }/member/myPage" />
+								<c:if test="${sessionScope.userNo != s.userNo }">
+									<c:set var="sellerUrl"
+										value="${pageContext.request.contextPath }/sell/seller/${s.userNo }" />
+								</c:if>
+								<a href="${sellerUrl }">
 									<div class="sellGradeAndNameBox">
 										<div class="sellerGradeImg">
 											<img
@@ -199,7 +201,7 @@
 
 							<!-- 채팅하기 버튼 -->
 							<div class="purchaseGobtnBox">
-								
+
 								<!-- 본인이 등록한 상품일 경우에만 수정하기, 삭제하기 버튼 보이게 -->
 								<c:if test="${sessionScope.userNo eq s.userNo}">
 									<button class="chattingbtn-sellDetail"
