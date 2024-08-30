@@ -1,4 +1,4 @@
-package com.youth.market.member.dto;
+package com.youth.market.follow.dto;
 
 import java.util.Date;
 
@@ -15,7 +15,7 @@ public class Follow {
 	private int flId;
 	private int fwId;
 	private Date createDate;
-	
+
 	/*
 	 * private int sellCount; private double avg;
 	 */
