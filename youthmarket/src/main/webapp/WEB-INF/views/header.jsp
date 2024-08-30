@@ -89,23 +89,15 @@
 								href="${pageContext.request.contextPath}/report/reportSearchForm.do"><img
 									src="/youthmarket/resources/images/icon/사기조회.png"
 									alt="사기조회 이미지">사기조회</a></li>
-<<<<<<< HEAD
 							<li><a
 								href="${pageContext.request.contextPath}/mypage/mypage"
 								class="checkUserNo"><img
 									src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
-=======
-							<li><c:if test="${sessionScope.userId != null}">
-									<a href="${path }/mypage/mypage.do" class="checkUserNo"><img
-										src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
-							</c:if>
-							<c:if test="${sessionScope.userId == null}">
-								<a href="${path }/member/loginForm.do" class="checkUserNo"><img
-									src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a>
+							<c:if test="${sessionScope.userId != null}">
+								<li><a href="${path }/mypage/mypage.do" class="checkUserNo"><img
+										src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a>
 								</li>
 							</c:if>
-
->>>>>>> branch 'main' of https://github.com/gunwoo94/youthmarket.git
 						</ul>
 					</div>
 				</div>

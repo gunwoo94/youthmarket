@@ -6,7 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/youthmarket/resources/css/member/mypage.css">
+<link rel="stylesheet"
+	href="/youthmarket/resources/css/member/mypage.css">
 <script type="text/javascript">
 	function del(){
 	    let pt = prompt("탈퇴하시려면 '회원 탈퇴'를 입력하세요")
@@ -50,8 +51,7 @@
 								<li><a href="${path }/member/updateForm.do">정보 수정</a></li>
 								<li><a href="#">거래 후기</a></li>
 								<li><a href="#">1:1 문의</a></li>
-								<li><button onclick="del()">
-										탈퇴하기</button></li>
+								<li><button onclick="del()">탈퇴하기</button></li>
 							</ul>
 						</div>
 					</div>
@@ -59,7 +59,8 @@
 						<div class="profile_box">
 							<div class="profile_1">
 								<div class="profile_iamge_box">
-									<img src="${path }/resources/images/fileSave/${member.fileName }"
+									<img
+										src="${path }/resources/images/fileSave/${member.fileName }"
 										alt="프로필 사진" width="300">
 								</div>
 								<div class="my_nickname">
@@ -74,7 +75,6 @@
 									<ul>
 										<li class="active"><a>전체</a></li>
 										<li class=""><a>판매중</a></li>
-										<li class=""><a>예약중</a></li>
 										<li class=""><a>판매완료</a></li>
 									</ul>
 								</div>
@@ -98,9 +98,6 @@
 									</div>
 									<div class="product_list">
 										<p>판매중 상품 리스트 넣는 곳</p>
-									</div>
-									<div class="product_list">
-										<p>예약중 상품 리스트 넣는 곳</p>
 									</div>
 									<div class="product_list">
 										<p>판매완료 리스트 넣는 곳</p>
