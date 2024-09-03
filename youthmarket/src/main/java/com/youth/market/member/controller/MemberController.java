@@ -3,6 +3,7 @@ package com.youth.market.member.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youth.market.admin.dto.Notice;
 import com.youth.market.admin.service.NoticeService;
+import com.youth.market.heart.dto.Heart;
 import com.youth.market.member.dto.Member;
 import com.youth.market.member.service.MailSendService;
 import com.youth.market.member.service.MemberService;
+import com.youth.market.sell.dto.Sell;
 
 @Controller
 public class MemberController {
@@ -34,7 +37,7 @@ public class MemberController {
 	@Autowired
 	private NoticeService ns;
 	private String emailChk;
-
+	
 	// 회원 가입 페이지 화면
 	@GetMapping("member/joinForm")
 	public void joinForm() {
@@ -103,7 +106,7 @@ public class MemberController {
 
 				// 세션에 사용자 정보 저장
 				session.setAttribute("userId", member2.getUserId()); // member.getUserId() 대신 member2.getUserId()를 사용하는
-				session.setAttribute("loginUser", member);														// 것이 더 명확합니다.
+				session.setAttribute("loginUser", member2);														// 것이 더 명확합니다.
 				session.setAttribute("userName", member2.getUserName());
 				session.setAttribute("userNo", member2.getUserNo()); // userNo 추가
 
@@ -128,13 +131,54 @@ public class MemberController {
 	public void main() {
 
 	}
-
+	@GetMapping("/mypage/heartList.do")
+	public void heartList(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("userId");
+		Member member = ms.select(userId);
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		List<Heart> heartList = ms.mypageHeartList(loginUser.getUserNo());
+		
+		
+		model.addAttribute("member", member);
+		model.addAttribute("heartList", heartList);
+	}
 	// 마이페이지 화면 (로그인 상태일 때만 보여짐 )
 	@GetMapping("/mypage/mypage")
 	public void mypage(HttpSession session, Model model) {
 		String userId = (String) session.getAttribute("userId");
 		Member member = ms.select(userId);
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		 // 상품판매 조회
+        int sellCount = ms.sellCount(loginUser.getUserNo());
+        // 팔로워 수 조회
+        int followCount = ms.followCount(loginUser.getUserNo());
+        // 신고 수 조회
+        int reportCount = ms.reportCount(loginUser.getUserNo());
+        
+        // 상점 오픈일
+        int marketOpen = ms.marketOpen(loginUser.getUserNo());
+        
+        //	찜 리스트  
+        List<Heart> heartList = ms.mypageHeartList(loginUser.getUserNo());
+        
+        // 판매상품 리스트
+        List<Sell> sellList = ms.mypageSellList(loginUser.getUserNo());
+        for (Sell sell : sellList) {
+            sell.setTimeago(sell.getCreateDate());
+        }
+        
+        System.out.println("heartList =" + heartList);
+        
+        model.addAttribute("sellCount", sellCount);
+        model.addAttribute("followCount", followCount);
+        model.addAttribute("reportCount", reportCount);
+        model.addAttribute("marketOpen", marketOpen);
+        model.addAttribute("sellList", sellList);
 		model.addAttribute("member", member);
+		model.addAttribute("heartList", heartList);
+		
 	}
 
 	// 회원 정보 수정 페이지 화면

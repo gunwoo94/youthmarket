@@ -1,11 +1,17 @@
 @charset "UTF-8";
 
+.main-section {
+	width: 1100px;
+	padding: 0px
+}
+
 .followAddOrSubBox {
 	margin: auto;
 	border: 1px solid rgb(211, 206, 206);
 	width: 270px;
 	height: 60px;
-	margin-left: 260px
+	margin-top:44px;
+	margin-left: 395px;
 }
 
 .followBtn-sell {
@@ -29,7 +35,7 @@
 }
 
 .catebox3 {
-	 width: 1000px !important;
+	width: 1000px !important;
 }
 
 .inner-menu {
@@ -65,19 +71,47 @@
 .ntheTop {
 	height: 40px !important;
 }
-.market-name{
-	justify-content : space-between;
+
+.market-name {
+	justify-content: space-between;
+	margin-top: 55px;
+	margin-bottom: 10px;
+	font-size: 30px; /* text-align: unset; */
+	font-weight: bold;
 }
-.reportBtn{
-	font-size : 20px;
-	color : grey;
-	cursor:pointer;
+
+.reportBtn {
+	font-size: 20px;
+	color: grey;
+	cursor: pointer;
 }
-.reportBtn:hover{
-	
-	color : black;
+
+.reportBtn:hover {
+	color: black;
 }
+
 .inline-flex {
 	display: inline-grid !important;
 	margin: .5em !important;
+}
+
+.profile {
+	float: left;
+	margin-right: 100px;
+}
+
+.info-list {
+	margin-top: 60px
+}
+.follower{
+	 float: left;
+    margin-right: 35px;
+}
+.market-open{
+	 float: left;
+    margin-right: 35px;
+}
+.sell-product{
+	 float: left;
+    margin-right: 39px;
 }

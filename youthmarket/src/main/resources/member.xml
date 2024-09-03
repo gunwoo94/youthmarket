@@ -19,6 +19,52 @@
 		<result property="reportCount" column="reportCount" />
 		<result property="fileName" column="filename" />
 	</resultMap>
+
+
+	<resultMap type="mypage" id="mypageResult">
+
+		<result column="SELL_NO" property="sellNo"></result>
+		<result column="REPORT_NO" property="reportNo"></result>
+		<result column="FW_ID" property="fwId"></result>
+		<result column="USER_NO" property="userNo"></result>
+		<result column="CREATE_DATE" property="createDate"></result>
+		<result column="STATUS" property="status"></result>
+		<result column="SELL_TITLE" property="sellTitle"></result>
+		<result column="SELL_STATUS" property="sellStatus"></result>
+
+	</resultMap>
+
+	<resultMap type="sell" id="sellResult">
+
+		<id column="SELL_NO" property="sellNo"></id>
+		<result column="USER_NO" property="userNo"></result>
+		<result column="CATEGORY_NO" property="categoryNo"></result>
+		<result column="SELL_TITLE" property="sellTitle"></result>
+		<result column="SELL_CONTENT" property="sellContent"></result>
+		<result column="IMAGE_SELL" property="imgSell"></result>
+		<result column="ORIGIN_NAME" property="originName"></result>
+		<result column="CHANGE_NAME" property="changeName"></result>
+		<result column="COUNT" property="count"></result>
+		<result column="PRICE" property="price"></result>
+		<result column="SELL_STATUS" property="sellStatus"></result>
+		<result column="CREATE_DATE" property="createDate"></result>
+		<result column="UPDATE_DATE" property="updateDate"></result>
+		<result column="STATUS" property="status"></result>
+		<result column="HEART_NUM" property="heartNum"></result>
+
+
+
+		<result column="CHATROOM_NO" property="chatRoomNo"></result>
+		<result column="CATEGORY_NAME" property="categoryName"></result>
+
+		<result column="REPORT_NUM" property="report_Num"></result>
+		<result column="FOLLOWER_NUM" property="follower_Num"></result>
+		<result column="SELL_NUM" property="sell_Num"></result>
+		<result column="FOLLOW_IS" property="follow_Is"></result>
+		<result column="HEART_IS" property="heart_Is"></result>
+
+	</resultMap>
+
 	<select id="select" parameterType="string"
 		resultMap="memberResult">
 		select * from member where user_id=#{userId}
@@ -84,7 +130,8 @@
 		ORDER BY USER_NO DESC
 		) a
 		)
-		WHERE rn BETWEEN #{startRow} AND #{endRow}
+		WHERE rn BETWEEN
+		#{startRow} AND #{endRow}
 	</select>
 
 	<select id="block_count" resultType="integer">
@@ -94,23 +141,129 @@
 	<!-- 관리자페이지 - 블랙리스트 상태변경 -->
 	<update id="adminBlockAccept" parameterType="integer">
 		UPDATE MEMBER
-		SET STATUS = 'N', BLACKLIST = 'Y'
+		SET
+		STATUS = 'N', BLACKLIST = 'Y'
 		WHERE USER_NO = #{userNo}
 	</update>
 	<update id="adminBlockCancel" parameterType="integer">
 		UPDATE MEMBER
-		SET STATUS = 'Y', BLACKLIST = 'N'
+		SET
+		STATUS = 'Y', BLACKLIST = 'N'
 		WHERE USER_NO = #{userNo}
 	</update>
-	
+
 	<!-- 관리자 유저 삭제 -->
 	<delete id="adminUserDelete" parameterType="integer">
-		DELETE MEMBER WHERE USER_NO = #{userNo}
+		DELETE MEMBER WHERE
+		USER_NO = #{userNo}
 	</delete>
-	
+
 	<update id="adminBlockList" parameterType="integer">
 		UPDATE MEMBER
-		SET STATUS = 'N', BLACKLIST = 'Y'
+		SET
+		STATUS = 'N', BLACKLIST = 'Y'
 		WHERE USER_NO = #{userNo}
 	</update>
+
+
+	<!-- 마이페이지 부분 -->
+	<select id="sellCount" resultType="Integer"
+		parameterType="Integer">
+		SELECT
+		COUNT(SELL_NO)
+		FROM SELL S
+		JOIN MEMBER M ON
+		M.USER_NO = S.USER_NO
+		WHERE M.USER_NO = #{userNo} AND S.STATUS='Y'
+	</select>
+
+	<select id="followCount" resultType="Integer"
+		parameterType="Integer">
+		SELECT
+		COUNT(FW_ID)
+		FROM FOLLOW
+		JOIN MEMBER ON USER_NO =
+		FW_ID
+		WHERE USER_NO = #{userNo}
+
+	</select>
+
+	<select id="reportCount" resultType="Integer"
+		parameterType="Integer">
+		SELECT
+		COUNT(REPORTED_NO)
+		FROM REPORT
+		JOIN MEMBER ON
+		USER_NO = REPORTED_NO
+		WHERE USER_NO = #{userNo}
+	</select>
+
+
+	<select id="marketOpen" resultType="Integer"
+		parameterType="Integer">
+		SELECT
+		ROUND(SYSDATE - CREATE_DATE)
+		FROM MEMBER
+		WHERE
+		USER_NO = #{userNo}
+
+
+	</select>
+
+	<!-- 신고하기 부분에서 씁니다. -->
+	<update id="deleteMember" parameterType="int">
+		DELETE
+		FROM MEMBER
+		WHERE
+		USER_NO = #{userNo}
+	</update>
+	<!-- 회원번호로 그 사람 객체 가져오기 -->
+	<select id="selectUser" parameterType="int" resultType="member">
+		SELECT *
+		FROM MEMBER
+		WHERE USER_NO = #{userNo}
+	</select>
+
+	<!-- 블랙리스트 유저 값 다시 넣기 -->
+	<select id="insertBlackListUser" parameterType="member">
+
+
+		INSERT INTO
+		MEMBER (
+		USER_NO,
+		USER_NAME,
+		PHONE,
+		BIRTH,
+		STATUS,
+		CREATE_DATE,
+		BLACKLIST,
+		USER_ID,
+		EMAIL,
+		ACCOUNT,
+		FILE_NAME
+		)
+		VALUES (
+		#{userNo},
+		#{userName},
+		#{phone},
+		#{birth},
+		'N',
+		#{createDate},
+		'Y',
+		#{userId},
+		#{email},
+		#{account},
+		#{fileName}
+		)
+
+	</select>
+	<!-- 찜하기 멤버 -->
+	<select id="selectMem" parameterType="member"
+		resultMap="memberResult">
+		SELECT *
+		FROM MEMBER
+		WHERE USER_NO = #{userNo} AND STATUS = 'Y'
+
+	</select>
+
 </mapper>

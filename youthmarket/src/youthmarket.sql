@@ -1,6 +1,6 @@
 
-select * from member;
-select * from sell;
+
+
 
 --아이디 및 권한 생성 -- 
 create user youthmarket identified by g1234;
@@ -18,10 +18,7 @@ insert into admin values(
 	'youth', '1234'
 );
 
-select * from ADMIN;
-select * from 
-select * from member;
-select * from notice;
+
 --공지사항
 CREATE TABLE ADMIN_NOTICE (
     NOTICE_NO      NUMBER          NOT NULL PRIMARY KEY, 
@@ -46,7 +43,7 @@ CREATE TABLE NOTICE (
     CONSTRAINT PK_NOTICE PRIMARY KEY (NOTICE_NO)
 );
 
-
+select * from member;
 -- 회원 정보 -- 
 drop table member cascade constraints;
 select * from member;
@@ -68,7 +65,7 @@ CREATE TABLE MEMBER (
 	filename      varchar2(100),
     CONSTRAINT PK_MEMBER PRIMARY KEY (USER_NO)
 );
-select * from member where user_id='k1';
+
 
 --카테 고리 --
 
@@ -163,33 +160,37 @@ CREATE TABLE REVIEW (
 
 
 --팔로우 --
+drop table FOLLOW cascade constraints;
 CREATE TABLE FOLLOW (
     FL_ID        NUMBER NOT NULL,
     CREATE_DATE  DATE   DEFAULT SYSDATE,
     FW_ID        NUMBER NOT NULL,
-    CONSTRAINT PK_FOLLOW PRIMARY KEY (FL_ID),
     CONSTRAINT FK_MEMBER_TO_FOLLOW_1 FOREIGN KEY (FL_ID) REFERENCES MEMBER(USER_NO),
     CONSTRAINT FK_MEMBER_TO_FOLLOWING FOREIGN KEY (FW_ID) REFERENCES MEMBER(USER_NO)
     
 );
 
+drop table HEART cascade constraints;
+--CREATE_HARTE = CREATE_DATE 로 변경 확인--
 --찜 --
 
 CREATE TABLE HEART (
     SELL_NO      NUMBER NOT NULL ,
     USER_NO      NUMBER NOT NULL ,
-    CREATE_HEART DATE DEFAULT SYSDATE ,
+    CREATE_DATE DATE DEFAULT SYSDATE ,
     HEART_NO     NUMBER NULL ,
     CONSTRAINT PK_HEART PRIMARY KEY (SELL_NO, USER_NO),
     CONSTRAINT FK_SELL_TO_HEART FOREIGN KEY (SELL_NO) REFERENCES SELL(SELL_NO),
     CONSTRAINT FK_MEMBER_TO_HEART FOREIGN KEY (USER_NO) REFERENCES MEMBER(USER_NO)
 );
 
---최근 본 상품 -- 
 
+--최근 본 상품 -- 
+drop table RECENT cascade constraints;
+--CREATE_DATE -- 오타 수정했음 
 CREATE TABLE RECENT (
     RECENT_NO   NUMBER NOT NULL ,
-    CRATE_DATE  DATE     DEFAULT SYSDATE,
+    CREATE_DATE  DATE     DEFAULT SYSDATE,
     STATUS      CHAR(1)   DEFAULT 'Y',
     USER_NO    NUMBER  NOT NULL,
     SELL_NO     NUMBER  NOT NULL,
@@ -280,7 +281,7 @@ CREATE TABLE CFILE (
 -- 신고 하기 
 CREATE TABLE REPORT (
     REPORT_NO      NUMBER        NOT NULL ,
-    REPORT_CONENT  VARCHAR2(4000) NOT NULL,
+    REPORT_CONTENT  VARCHAR2(4000) NOT NULL,
     CREATE_DATE    DATE          DEFAULT SYSDATE ,
     STATUS         CHAR(1)         DEFAULT 'Y' ,
     REPORTER_NO    NUMBER        NOT NULL ,
@@ -290,5 +291,6 @@ CREATE TABLE REPORT (
     CONSTRAINT FK_MEMBER_TO_REPORTED_1 FOREIGN KEY (REPORTED_NO) REFERENCES MEMBER(USER_NO)
     
 );
+drop table REPORT cascade constraints;
 
-
+select * from member where BLACKLIST='Y';

@@ -2,7 +2,9 @@ package com.youth.market.member.service;
 
 import java.util.List;
 
+import com.youth.market.heart.dto.Heart;
 import com.youth.market.member.dto.Member;
+import com.youth.market.sell.dto.Sell;
 
 public interface MemberService {
 	Member select(String userId);
@@ -30,4 +32,16 @@ public interface MemberService {
 	List<Member> blockList(int startRow, int endRow);
 
 	int block_count();
+
+	int sellCount(int userNo);
+
+	int followCount(int userNo);
+
+	int reportCount(int userNo);
+
+	int marketOpen(int userNo);
+
+	List<Sell> mypageSellList(int userNo);
+
+	List<Heart> mypageHeartList(int userNo);
 }

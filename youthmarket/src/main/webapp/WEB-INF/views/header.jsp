@@ -89,7 +89,7 @@
 								href="${pageContext.request.contextPath}/report/reportSearch"><img
 									src="/youthmarket/resources/images/icon/사기조회.png"
 									alt="사기조회 이미지">사기조회</a></li>
-							<li><c:if test="${sessionScope.userId != null}">
+							<li><c:if test="${sessionScope.userNo != null}">
 									<a href="${path }/mypage/mypage.do" class="checkUserNo"><img
 										src="/youthmarket/resources/images/icon/내상점.png" alt="내상점 이미지">내상점</a></li>
 							</c:if>

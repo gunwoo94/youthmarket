@@ -12,12 +12,23 @@
 		<typeAlias alias="category" type="com.youth.market.sell.dto.Category"/>
 		<typeAlias alias="admin" type="com.youth.market.admin.dto.Admin"/>
 		<typeAlias alias="notice" type="com.youth.market.admin.dto.Notice"/>
+		<typeAlias alias="follow" type="com.youth.market.follow.dto.Follow"/>
+		<typeAlias alias="memberfollow" type="com.youth.market.follow.dto.MemberFollow"/>
+		<typeAlias alias="mypage" type="com.youth.market.member.dto.Mypage"/>
+		<typeAlias alias="report" type="com.youth.market.report.dto.Report"/>
+		<typeAlias alias="heart" type="com.youth.market.heart.dto.Heart"/>
+		<typeAlias alias="recent" type="com.youth.market.recent.dto.Recent"/>
+		
 	</typeAliases>
 		<mappers>
 			<mapper resource="member.xml"/>
 			<mapper resource="sell.xml"/>
 			<mapper resource="admin.xml"/>
 			<mapper resource="notice.xml"/>
+			<mapper resource="follow.xml"/>
+			<mapper resource="report.xml"/>
+			<mapper resource="heart.xml"/>
+			<mapper resource="recent.xml"/>
 		</mappers>
 	
 </configuration>

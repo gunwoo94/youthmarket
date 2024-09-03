@@ -134,8 +134,7 @@ public class SellController {
 
 		model.addAttribute("sellList", sellList);
 		model.addAttribute("categoryCode", categoryCode);
-		System.out.println("sellList: " + sellList);
-		System.out.println(categoryCode);
+	
 
 		return "sell/Gocategory"; // 뷰의 이름을 반환
 	}
@@ -166,7 +165,7 @@ public class SellController {
 	public String updateSell(Sell s, Model model, HttpSession session) throws IOException {
 	    Integer userNo = (Integer) session.getAttribute("userNo");
 	    s.setUserNo(userNo);
-
+	    
 	    String webPath = "/resources/images/sell/";
 	    String serverFolderPath = session.getServletContext().getRealPath(webPath);
 	  
@@ -229,13 +228,17 @@ public class SellController {
 	public String sellDetail(@PathVariable("sellNo") int sellNo, HttpSession session, HttpServletRequest req,
 			HttpServletResponse res, Model model) throws Exception {
 
+	   
 		// 세션에서 userNo 가져오기
 		Integer userNo = (Integer) session.getAttribute("userNo");
 		Map<String, Integer> map = new HashMap<>();
 		map.put("sellNo", sellNo);
-		map.put("userNo", userNo); // 세션에서 가져온 userNo를 map에 추가
-		List<Sell> sellList = ss.selectSellDetail(map);
+		map.put("userNo", userNo);
 		
+		// 세션에서 가져온 userNo를 map에 추가
+		List<Sell> sellList = ss.selectSellDetail(map);
+		Map<String, Integer> map1 = new HashMap<>();
+		map1.put("sellerNo", sellList.get(0).getUserNo()); // 판매자의 userNo를 설정
 		 // 조회수 증가 로직을 추가하기 위해 쿠키 검사
 	    Cookie[] cookies = req.getCookies();
 	    Cookie viewCookie = null;
@@ -262,9 +265,9 @@ public class SellController {
 	        // 조회수 증가 처리
 	        int result = ss.increaseCount(sellNo);
 	        if (result > 0) {
-	            System.out.println("조회수 증가 성공");
+	          
 	        } else {
-	            System.out.println("조회수 증가 실패");
+	        
 	        }
 	    } else {
 	        // 이미 쿠키가 존재할 경우 조회수 증가 로직을 처리하지 않음
@@ -279,7 +282,7 @@ public class SellController {
 			model.addAttribute("errorMessage", "상품을 찾을 수 없습니다.");
 		} 
 		model.addAttribute("sellList", sellList);
-
+		model.addAttribute("member", ss.sellerDetail(map1));
 		return "sell/sellDetailForm";
 	}
 

@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.youth.market.heart.dto.Heart;
 import com.youth.market.member.dao.MemberDao;
 import com.youth.market.member.dto.Member;
+import com.youth.market.sell.dto.Sell;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -76,6 +78,42 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int block_count() {
 		return md.block_count();
+	}
+
+	@Override
+	public int sellCount(int userNo) {
+		// TODO Auto-generated method stub
+		return md.sellCount(userNo);
+	}
+
+	@Override
+	public int followCount(int userNo) {
+		// TODO Auto-generated method stub
+		return md.followCount(userNo);
+	}
+
+	@Override
+	public int reportCount(int userNo) {
+		// TODO Auto-generated method stub
+		return md.reportCount(userNo);
+	}
+
+	@Override
+	public int marketOpen(int userNo) {
+		// TODO Auto-generated method stub
+		return md.marketOpen(userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList(int userNo) {
+		// TODO Auto-generated method stub
+		return md.mypageSellList(userNo);
+	}
+
+	@Override
+	public List<Heart> mypageHeartList(int userNo) {
+		// TODO Auto-generated method stub
+		return md.mypageHeartList(userNo);
 	}
 
 }

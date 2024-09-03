@@ -18,7 +18,62 @@
 
 </head>
 <body>
-
+	<script>
+		// localStorage에서 "products" 키 값으로 가져온다.
+		let products = localStorage.getItem("products");
+	
+		// 만약 products가 undefined가 아니라면 list 변수에 JSON.parse(products)를 통해서 JSON Array를 만들고, 그게 아니라면 list 변수를 새로운 배열로 생성한다.
+		let list = products ? JSON.parse(products) : [];
+	
+		// 날짜를 실시간으로 얻기
+		let date = new Date();
+		let year = date.getFullYear(); // 2023출력
+	
+		let month = date.getMonth() + 1; // 0부터 시작하니 + 1 해줘서 현재 월을 출력
+		month = month < 10 ? "0" + month : month; // 4월 또는 8월을 04월 08월 출력
+	
+		let day = date.getDate();
+		day = day < 10 ? "0" + day : day;
+	
+		let hour = date.getHours();
+		hour = hour < 10 ? "0" + hour : hour;
+	
+		let minute = date.getMinutes();
+		minute = minute < 10 ? "0" + minute : minute;
+	
+		let second = date.getSeconds();
+		second = second < 10 ? "0" + second : second;
+	
+		let dateString = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+	
+		let item = {sellNo : ${s.sellNo}, imgSell : "${s.imgSell}",createDate : dateString};
+	
+		<c:if test="${sessionScope.loginUser == null}">
+			// 로그인 하지 않은 상태
+			// 일단 아이템이 현재 로컬 스토리지의 상품들에 있지 않다는 가정
+			let exists = false; // 존재하지 않음을 설정
+			// localStorage의 상품을 for문으로 반복
+			for (let i = 0; i < list.length; i++) {
+				// 만약 상품들 중 현재 보는 item이 있다면
+				if (item.sellNo == list[i].sellNo) {
+					// list에서 제거하고
+					list.splice(i, i + 1);
+					// 존재함을 true로 변경 후에
+					exists = true;
+					// 반복문을 빠져나간다.
+					break;
+				}
+			}
+			// list의 첫번째 부분에 item을 추가함
+		</c:if>
+	
+		list.unshift(item); // 배열 맨 앞에 추가할 item.
+	
+		// localStorge에 "products" 키값으로 JSON 형태로 list를 파싱하여 넣는다.
+		localStorage.setItem("products", JSON.stringify(list));
+		
+	</script>
+	
 
 	<div class="main-section">
 		<div class="sellDetail-div2">
@@ -70,7 +125,7 @@
 							<!-- 판매자 정보 -->
 							<div class="sellerInfo">
 								<c:set var="sellerUrl"
-									value="${pageContext.request.contextPath }/member/myPage" />
+									value="${pageContext.request.contextPath }/mypage/mypage.do" />
 								<c:if test="${sessionScope.userNo != s.userNo }">
 									<c:set var="sellerUrl"
 										value="${pageContext.request.contextPath }/sell/seller/${s.userNo }" />
@@ -79,7 +134,7 @@
 									<div class="sellGradeAndNameBox">
 										<div class="sellerGradeImg">
 											<img
-												src="/youthmarket/resources/images/icon/backGray_grade3.png"
+												src="${path }/resources/images/fileSave/${member.fileName }"
 												width="100%" height="100%" />
 										</div>
 										<div class="sellerNameInfoBox">
@@ -115,7 +170,7 @@
 											style="width: 100%; height: 100%;">
 											<img class="followBtm"
 												src="/youthmarket/resources/images/icon/followSubBtn.png"
-												width="100%" height="80%">
+												width="100%" heisght="80%">
 										</button>
 									</c:if>
 								</div>
@@ -274,6 +329,271 @@
 	</script>
 
 
+
+	<script>
+
+	$(document).on("click", ".followBtn-sell", (e) => {
+		if ("${loginUser.userNo}" == "${s.userNo}") {
+	   				Swal.fire({
+		                icon: 'error',
+		                title: '본인 상점은 팔로우 안돼요 !'                  
+		            });
+			return;
+		}
+
+		let sellUserNumber = ${s.userNo};
+		
+		
+		$(e.target).parent().removeClass("followBtn-sell"); // 중복 이벤트 방지를 위해 class를 제거. (class를 제거하면 더 이상 이벤트 발생 안함)
+		$.ajax({
+			url : '${pageContext.request.contextPath}/follow/addFollow',
+			type : "post",
+			data : {fwId : "${s.userNo}"},
+			dataType : "json",
+			success : function(data) {
+
+				let result = Number(data.result);
+				if (result == 1) {
+						Swal.fire({
+		 	   		        icon: 'success',
+		 	   		        title: sellUserNumber+'호점 팔로우 성공',
+		 	   		        allowOutsideClick : false,
+		 	   		    	showConfirmButton: false,
+						});
+						
+	 	   		        setTimeout(function() {
+      	            	  location.reload();
+      	            	}, 1300);
+					
+				} else if (result == 2) {
+					
+						Swal.fire({
+							icon:'question',
+							text:'이미 팔로우 했습니다. 팔로우를 취소하시겠습니까?',
+							showCancelButton: false,
+							confirmButtonText: '네',
+							allowOutsideClick : true
+						}).then(function(){
+							   follow();
+						})
+
+				} else {
+					Swal.fire({
+		                icon: 'error',
+		                title: '로그인 후 가능합니다.'
+					})
+				}
+				console.log(data);
+			},
+			error : function() {
+				alert("오류가 발생.");
+				console.log("오류");
+			},
+			complete : function () {
+				$(e.target).parent().addClass("followBtn-sell");
+			}
+		})
+
+	    });
+	</script>
+
+	<script>
+	function follow(){
+		
+		$.ajax({
+			url : '${pageContext.request.contextPath}/follow/delFollow',
+			type : "post",
+			data : {fwId : "${s.userNo}"},
+			dataType : "json",
+			success : function(data) {
+				let count = Number(data.result)
+				if (count == 1) {
+					
+ 	   	   				Swal.fire({
+ 	   		                icon: 'success',
+ 	   		                title: '팔로우 취소되었습니다.',
+ 	   		            	showConfirmButton: false,
+ 	   		           		allowOutsideClick : false,
+ 	   		           		timer: 1300 
+ 	   		            });
+ 	   	   				
+					$(".followBtm").attr("src", $(".followBtm").attr("src").replace("followSubBtn.png", "followAddBtn.png"));
+					setTimeout(function() {
+  	            	  location.reload();
+  	            	}, 1300);
+				} else {
+ 	   	   				Swal.fire({
+ 	   		                icon: 'error',
+ 	   		                title: '팔로우 취소 실패되었습니다.'                  
+ 	   		            });
+				}
+			},
+			error : function() {
+				alert("오류!!!");
+				console.log("오류");
+			}
+		});
+		
+	}
+	
+	</script>
+
+	<script>
+	   //신고버튼 클릭 시
+		 $('#addReport').on('click', function(){
+			if( !(${loginUser.userNo >= 0}) ){
+				alert("로그인하고 신고해주세요");
+				return;
+			 }
+			 
+	 		Swal.fire({
+	 		  title: '상점신고',
+	 		  input: 'radio',
+	 		  inputOptions: {
+		 			주류_담배 : '주류/담배',
+		 			전문의약품_의료기기 : '전문 의약품/의료기기',
+		 			개인정보거래 : '개인정보 거래',
+		 			음란물_성인용품 : '음란물/성인용품',
+		 			위조상품 : '위조상품',
+		 			총포_도검류 : '총포/도검류',
+		 			게임계정 : '게임 계정',
+		 			동물분양_입양글 : '동물 분양, 입양글',
+		 			기타 : '기타'
+	 		  },
+	 		  customClass: {
+	 			    input: 'inline-flex',
+	 			    inputLabel: 'inline-block'
+	 		  }
+			}).then(function(reportContent) {
+			    if (reportContent.value) {
+			    	Swal.fire('상점신고 완료', reportContent.value+" (으)로 신고하셨습니다.", "success");
+			        reportAdd(reportContent.value);
+			        console.log("Result: " + reportContent.value);
+			    }
+			})
+	 	
+		 });
+	   
+	   
+		//신고추가
+		 function reportAdd(value){
+
+			 	const sellUserNo = 	"${AllList.get('product').userNo }";
+			 	const purchaseUserNo = "${AllList.get('purchaseInfo').userNo }";
+			
+				$.ajax({
+					url : "${pageContext.request.contextPath}/report/addReport",
+					type:"POST",
+					data : {reportContent : value,
+							sellUserNo : ${s.userNo}
+	      		},
+					success : function(result){
+						if(result == 1){
+							setTimeout(function() {
+          	            	  location.reload();
+          	            	}, 2000);
+
+						}
+					},
+					error : function(){
+						console.log("통신실패");
+					}
+				});
+	    };
+	</script>
+
+
+	<script>
+	$(function() {
+	    var $likeBtn = $('.icon.heart');
+	    var isProcessing = false;
+
+	    $likeBtn.click(function() {
+	        if (isProcessing) {
+	            return;  // 이미 요청이 처리 중인 경우 중복 방지
+	        }
+	        isProcessing = true;
+
+	        if (!this.classList.contains('active')) {
+	            // 찜하기 추가
+	            $.ajax({
+	                url: '${pageContext.request.contextPath}/addHeart',
+	                type: 'post',
+	                data: { sellNo: "${s.sellNo}" },
+	                success: function(result) {
+	                    if (result == "c") {
+	                        Swal.fire({
+	                            icon: 'success',
+	                            title: '찜하기 성공'
+	                        });
+	                        $likeBtn.toggleClass('active');
+	                        $likeBtn.find('img').attr({
+	                            'src': 'https://cdn-icons-png.flaticon.com/512/803/803087.png',
+	                            alt: '찜하기 완료'
+	                        });
+	                        setTimeout(function() {
+	                            location.reload();
+	                        }, 1000);
+	                    } else {
+	                        Swal.fire({
+	                            icon: 'error',
+	                            title: '회원만 사용할 수 있습니다.'
+	                        });
+	                    }
+	                },
+	                error: function() {
+	                    Swal.fire({
+	                        icon: 'error',
+	                        title: '찜하기 실패(관리자에게 문의해주세요)'
+	                    });
+	                },
+	                complete: function() {
+	                    isProcessing = false;  // 요청 완료 후 처리 상태 해제
+	                }
+	            });
+	        } else {
+	            // 찜하기 취소
+	            $.ajax({
+	                url: '${pageContext.request.contextPath}/mypageDeleteHeart',
+	                type: 'post',
+	                data: { sellNo: "${s.sellNo}" },
+	                success: function(result) {
+	                    if (result == "f") {
+	                        Swal.fire({
+	                            icon: 'success',
+	                            title: '찜하기 취소'
+	                        });
+	                        $likeBtn.toggleClass('active');
+	                        $likeBtn.find('img').attr({
+	                            'src': 'https://cdn-icons-png.flaticon.com/512/812/812327.png',
+	                            alt: '찜하기 취소'
+	                        });
+	                        setTimeout(function() {
+	                            location.reload();
+	                        }, 1000);
+	                    } else {
+	                        Swal.fire({
+	                            icon: 'error',
+	                            title: '회원만 사용할 수 있습니다.'
+	                        });
+	                    }
+	                },
+	                error: function() {
+	                    Swal.fire({
+	                        icon: 'error',
+	                        title: '찜하기 취소 실패(관리자에게 문의해주세요)'
+	                    });
+	                },
+	                complete: function() {
+	                    isProcessing = false;  // 요청 완료 후 처리 상태 해제
+	                }
+	            });
+	        }
+	    });
+	});
+
+	       
+    </script>
 
 </body>
 </html>

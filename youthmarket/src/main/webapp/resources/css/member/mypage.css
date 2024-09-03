@@ -177,3 +177,27 @@ h2 {
 .main_menu .my_product .product_list_box .product_list p {
 	text-align: center;
 }
+
+.profile {
+	float: left;
+	margin-right: 100px;
+}
+
+.info-list {
+	margin-top: 94px;
+}
+.follower{
+	 float: left;
+    margin-right: 35px;
+}
+.market-open{
+	 float: left;
+    margin-right: 35px;
+}
+.sell-product{
+	 float: left;
+    margin-right: 39px;
+}
+.report{
+	float:left;
+}

@@ -1,4 +1,4 @@
-function storeProduct(sellNo, imgSrc) {
+function storeProduct(sellNo, imgSell) {
     // localStorage에서 "products" 키 값으로 가져온다.
     let products = localStorage.getItem("products");
 
@@ -30,7 +30,7 @@ function storeProduct(sellNo, imgSrc) {
     // JSP 표현식을 자바스크립트로 전달하기 위해, 문자열을 사용
     let item = {
         sellNo: sellNo,
-        imgSrc: imgSrc,
+        imgSell: imgSell,
         createDate: dateString
     };
 

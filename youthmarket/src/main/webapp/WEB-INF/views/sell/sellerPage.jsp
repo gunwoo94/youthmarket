@@ -32,12 +32,11 @@
 
 		<div class="content2">
 
-			<div class="profile">
+			<div class="profile" width="">
 
 				<!-- 상점 등급 이미지 나오는 박스 -->
 				<div class="profile-image">
-					<img
-						src="${path }/resources/images/fileSave/${member.fileName }"
+					<img src="${path }/resources/images/fileSave/${member.fileName }"
 						height="300px" width="300px">
 				</div>
 				<br> <a class="market-grade" data-toggle="modal"
@@ -126,12 +125,12 @@
 					<br> <br> <br>
 
 
-					<div class="followAddOrSubBox" style="margin-left: 290px;">
+					<div class="followAddOrSubBox" style="margin-left: 395px;">
 						<c:if
 							test="${sessionScope.userNo == null || member.isFollow == 0}">
 							<button type="button" class="followBtn-sell"
 								style="width: 100%; height: 100%;">
-								<img src="/tresure/resources/images/icon/followAddBtn.png"
+								<img src="/youthmarket/resources/images/icon/followAddBtn.png"
 									width="100%" height="70%">
 							</button>
 
@@ -141,7 +140,7 @@
 							<button type="button" class="followBtn-sell"
 								style="width: 100%; height: 100%;">
 								<img class="followBtm"
-									src="/tresure/resources/images/icon/followSubBtn.png"
+									src="/youthmarket/resources/images/icon/followSubBtn.png"
 									width="100%" height="70%">
 							</button>
 						</c:if>
@@ -162,12 +161,12 @@
 					<div class="list-a">
 						<button class="market-product" type="button" onclick="show(this);"
 							id="product" name="show">
-							<span class="rproduct">상품</span>
+							<span class="rproduct">판매중인 상품</span>
 						</button>
-						<button class="market-review" type="button" onclick="show(this);"
+						<!-- 					<button class="market-review" type="button" onclick="show(this);"
 							id="review" name="show">
 							<span class="rrview">상점후기</span>
-						</button>
+						</button> -->
 					</div>
 					<br> <br>
 				</div>
@@ -199,7 +198,7 @@
 											<span>&nbsp;${s.sellTitle}</span><br> <br>
 											<div class="price-time2">
 												<br> &nbsp;<img
-													src="/tresure/resources/images/icon/heart.png" width="15px"
+													src="/youthmarket/resources/images/icon/heart.png" width="15px"
 													height="15px" style="margin-top: 2px;">&nbsp;${s.heartNum}
 												&nbsp;&nbsp;&nbsp;${s.timeago} <br> <span
 													style="font-size: 33px; color: black;">${s.price}원</span>
@@ -309,6 +308,7 @@
 	  	   		                title: '팔로우 취소되었습니다.',
 	  	   		            	showConfirmButton: false,
 	  	   		           		allowOutsideClick : false,
+	  	   		          		timer: 1300 
 	  	   		            });
 	  	   	   				
 	 					$(".followBtm").attr("src", $(".followBtm").attr("src").replace("followSubBtn.png", "followAddBtn.png"));
