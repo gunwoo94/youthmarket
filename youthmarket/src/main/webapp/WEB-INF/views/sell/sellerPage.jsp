@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ include file="../common.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -91,7 +89,7 @@
 
 					<div class="info-list">
 						<div class="market-open">
-							<img src="/tresure/resources/images/icon/상점오픈.png" width="20"
+							<img src="${path }/resources/images/icon/상점오픈.png" width="20"
 								height="15" alt="상점오픈일 아이콘"> &nbsp;상점오픈일
 							<div class="market-opendate">
 								<span>${member.marketOpen }</span>일전
@@ -99,7 +97,7 @@
 						</div>
 
 						<div class="follower">
-							<img src="/tresure/resources/images/icon/팔로워.png" width="20"
+							<img src="${path }/resources/images/icon/팔로워.png" width="20"
 								height="15" alt="팔로워 아이콘"> &nbsp;팔로워
 							<div class="market-follower">
 								<span>${member.followCount }</span> 명
@@ -107,7 +105,7 @@
 						</div>
 
 						<div class="sell-product">
-							<img src="/tresure/resources/images/icon/판매수.png" width="20"
+							<img src="${path }/resources/images/icon/판매수.png" width="20"
 								height="15" alt="상품판매 아이콘"> &nbsp;상품판매
 							<div class="market-sell">
 								<span>${member.sellCount }</span> 회
@@ -115,7 +113,7 @@
 						</div>
 
 						<div class="report">
-							<img src="/tresure/resources/images/icon/신고수.png" width="20"
+							<img src="${path }/resources/images/icon/신고수.png" width="20"
 								height="15" alt="신고 아이콘"> &nbsp;신고
 							<div class="market-report">
 								<span>${member.reportCount}</span>회
@@ -199,8 +197,13 @@
 											<span>&nbsp;${s.sellTitle}</span><br> <br>
 											<div class="price-time2">
 												<br> &nbsp;<img
+<<<<<<< HEAD
 													src="/tresure/resources/images/icon/heart.png" width="15px"
 													height="15px" style="margin-top: 2px;">&nbsp;${s.heartNum}
+=======
+													src="/youthmarket/resources/images/icon/heart.png"
+													width="15px" height="15px" style="margin-top: 2px;">&nbsp;${s.heartNum}
+>>>>>>> stash
 												&nbsp;&nbsp;&nbsp;${s.timeago} <br> <span
 													style="font-size: 33px; color: black;">${s.price}원</span>
 											</div>

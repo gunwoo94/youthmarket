@@ -83,4 +83,42 @@ public class MemberServiceImpl implements MemberService {
 		return md.block_count();
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public int sellCount(int userNo) {
+		return md.sellCount(userNo);
+	}
+
+	@Override
+	public int followCount(int userNo) {
+		return md.followCount(userNo);
+	}
+
+	@Override
+	public int reportCount(int userNo) {
+		return md.reportCount(userNo);
+	}
+
+	@Override
+	public int marketOpen(int userNo) {
+		return md.marketOpen(userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList(int userNo) {
+		return md.mypageSellList(userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList2(int userNo) {
+		return md.mypageSellList2(userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList3(int userNo) {
+		return md.mypageSellList3(userNo);
+	}
+
+>>>>>>> stash
 }

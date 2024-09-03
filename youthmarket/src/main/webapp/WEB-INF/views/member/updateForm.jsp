@@ -41,7 +41,11 @@
 						required="required" class="form-control"></td>
 				</tr>
 				<tr>
+<<<<<<< HEAD
 					<th>상점명 <i class="bi bi-person-vcard"></i></th>
+=======
+					<th>상점명 <i class="bi bi-file-earmark-person icofont-2x"></i></th>
+>>>>>>> stash
 					<td><input type="text" name="userName" required="required"
 						class="form-control" value="${member.userName }"></td>
 				</tr>

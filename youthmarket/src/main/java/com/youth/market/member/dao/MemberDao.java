@@ -32,4 +32,22 @@ public interface MemberDao {
 	List<Member> blockList(int startRow, int endRow);
 
 	int block_count();
+<<<<<<< HEAD
 }
+=======
+
+	int sellCount(int userNo);
+
+	int followCount(int userNo);
+
+	int reportCount(int userNo);
+
+	int marketOpen(int userNo);
+
+	List<Sell> mypageSellList(int userNo);
+
+	List<Sell> mypageSellList2(int userNo);
+
+	List<Sell> mypageSellList3(int userNo);
+}
+>>>>>>> stash

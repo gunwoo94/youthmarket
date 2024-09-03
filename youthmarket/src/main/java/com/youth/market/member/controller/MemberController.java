@@ -134,7 +134,45 @@ public class MemberController {
 	public void mypage(HttpSession session, Model model) {
 		String userId = (String) session.getAttribute("userId");
 		Member member = ms.select(userId);
+<<<<<<< HEAD
+=======
+		Member loginUser = (Member) session.getAttribute("loginUser");
+
+		// 상품판매 조회
+		int sellCount = ms.sellCount(loginUser.getUserNo());
+
+		// 팔로워 수 조회
+		int followCount = ms.followCount(loginUser.getUserNo());
+		// 신고 수 조회
+		int reportCount = ms.reportCount(loginUser.getUserNo());
+
+		// 상점 오픈일
+		int marketOpen = ms.marketOpen(loginUser.getUserNo());
+
+		// 판매상품 리스트
+		List<Sell> sellList = ms.mypageSellList(loginUser.getUserNo());
+		for (Sell sell : sellList) {
+			sell.setTimeago(sell.getCreateDate());
+		}
+
+		List<Sell> sellList2 = ms.mypageSellList2(loginUser.getUserNo());
+
+		List<Sell> sellList3 = ms.mypageSellList3(loginUser.getUserNo());
+
+		model.addAttribute("sellCount", sellCount);
+		model.addAttribute("followCount", followCount);
+		model.addAttribute("reportCount", reportCount);
+		model.addAttribute("marketOpen", marketOpen);
+		model.addAttribute("sellList", sellList);
+		model.addAttribute("sellList2", sellList2);
+		model.addAttribute("sellList3", sellList3);
+>>>>>>> stash
 		model.addAttribute("member", member);
+<<<<<<< HEAD
+=======
+
+		System.out.println("Sell List Size: " + sellList.size());
+>>>>>>> stash
 	}
 
 	// 회원 정보 수정 페이지 화면

@@ -89,4 +89,42 @@ public class MemberDaoImpl implements MemberDao {
 		return sst.selectOne("memberns.block_count");
 	}
 
+<<<<<<< HEAD
+=======
+	@Override
+	public int sellCount(int userNo) {
+		return sst.selectOne("memberns.sellCount", userNo);
+	}
+
+	@Override
+	public int followCount(int userNo) {
+		return sst.selectOne("memberns.followCount", userNo);
+	}
+
+	@Override
+	public int reportCount(int userNo) {
+		return sst.selectOne("memberns.reportCount", userNo);
+	}
+
+	@Override
+	public int marketOpen(int userNo) {
+		return sst.selectOne("memberns.marketOpen", userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList(int userNo) {
+		return sst.selectList("sellns.mypageSellList", userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList2(int userNo) {
+		return sst.selectList("sellns.mypageSellList2", userNo);
+	}
+
+	@Override
+	public List<Sell> mypageSellList3(int userNo) {
+		return sst.selectList("sellns.mypageSellList3", userNo);
+	}
+
+>>>>>>> stash
 }
