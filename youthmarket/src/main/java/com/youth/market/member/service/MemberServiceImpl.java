@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.youth.market.member.dao.MemberDao;
 import com.youth.market.member.dto.Member;
+import com.youth.market.sell.dto.Sell;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -83,8 +84,6 @@ public class MemberServiceImpl implements MemberService {
 		return md.block_count();
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public int sellCount(int userNo) {
 		return md.sellCount(userNo);
@@ -120,5 +119,4 @@ public class MemberServiceImpl implements MemberService {
 		return md.mypageSellList3(userNo);
 	}
 
->>>>>>> stash
 }

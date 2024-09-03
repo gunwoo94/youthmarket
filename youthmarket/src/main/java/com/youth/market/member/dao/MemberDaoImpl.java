@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.youth.market.member.dto.Member;
+import com.youth.market.sell.dto.Sell;
 
 @Repository
 public class MemberDaoImpl implements MemberDao {
@@ -89,8 +90,6 @@ public class MemberDaoImpl implements MemberDao {
 		return sst.selectOne("memberns.block_count");
 	}
 
-<<<<<<< HEAD
-=======
 	@Override
 	public int sellCount(int userNo) {
 		return sst.selectOne("memberns.sellCount", userNo);
@@ -126,5 +125,4 @@ public class MemberDaoImpl implements MemberDao {
 		return sst.selectList("sellns.mypageSellList3", userNo);
 	}
 
->>>>>>> stash
 }

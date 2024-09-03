@@ -3,6 +3,7 @@ package com.youth.market.member.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,7 @@ import com.youth.market.admin.service.NoticeService;
 import com.youth.market.member.dto.Member;
 import com.youth.market.member.service.MailSendService;
 import com.youth.market.member.service.MemberService;
+import com.youth.market.sell.dto.Sell;
 
 @Controller
 public class MemberController {
@@ -39,9 +41,8 @@ public class MemberController {
 	@GetMapping("member/joinForm")
 	public void joinForm() {
 	}
-	
-	
-	//회원가입
+
+	// 회원가입
 	@PostMapping("/member/join")
 	public void join(Member member, Model model, HttpSession session) throws IOException {
 		int result = 0;
@@ -92,7 +93,7 @@ public class MemberController {
 	@PostMapping("/member/login")
 	public void login(Member member, Model model, HttpSession session) {
 		int result = 0;
-			
+
 		// 회원 정보 조회
 		Member member2 = ms.select(member.getUserId());
 
@@ -103,7 +104,7 @@ public class MemberController {
 
 				// 세션에 사용자 정보 저장
 				session.setAttribute("userId", member2.getUserId()); // member.getUserId() 대신 member2.getUserId()를 사용하는
-				session.setAttribute("loginUser", member);														// 것이 더 명확합니다.
+				session.setAttribute("loginUser", member); // 것이 더 명확합니다.
 				session.setAttribute("userName", member2.getUserName());
 				session.setAttribute("userNo", member2.getUserNo()); // userNo 추가
 
@@ -134,8 +135,6 @@ public class MemberController {
 	public void mypage(HttpSession session, Model model) {
 		String userId = (String) session.getAttribute("userId");
 		Member member = ms.select(userId);
-<<<<<<< HEAD
-=======
 		Member loginUser = (Member) session.getAttribute("loginUser");
 
 		// 상품판매 조회
@@ -166,13 +165,11 @@ public class MemberController {
 		model.addAttribute("sellList", sellList);
 		model.addAttribute("sellList2", sellList2);
 		model.addAttribute("sellList3", sellList3);
->>>>>>> stash
+
 		model.addAttribute("member", member);
-<<<<<<< HEAD
-=======
 
 		System.out.println("Sell List Size: " + sellList.size());
->>>>>>> stash
+
 	}
 
 	// 회원 정보 수정 페이지 화면
@@ -328,7 +325,7 @@ public class MemberController {
 
 	@GetMapping("/member/insertMember")
 	public void insertmember() {
-		for (int i = 1; i <50; i++) {
+		for (int i = 1; i < 50; i++) {
 			Member member = new Member();
 			member.setAccount("1111-" + i);
 			member.setBirth("2024-01-" + i);
@@ -343,16 +340,17 @@ public class MemberController {
 			ms.insert(member);
 		}
 	}
+
 	@GetMapping("member/insertMember2")
 	public void insertmember2() {
-		for(int i = 1; i <= 10; i++ ) {
-		Notice notice = new Notice();
-		notice.setNoticeType(""+i);
-		notice.setNoticeTitle("가나" + i);
-		notice.setNoticeWriter("홍길동" + i);
-		notice.setNoticeImg("A" + i);
-		notice.setNoticeHit(i);
-		ns.insert(notice);
+		for (int i = 1; i <= 10; i++) {
+			Notice notice = new Notice();
+			notice.setNoticeType("" + i);
+			notice.setNoticeTitle("가나" + i);
+			notice.setNoticeWriter("홍길동" + i);
+			notice.setNoticeImg("A" + i);
+			notice.setNoticeHit(i);
+			ns.insert(notice);
 		}
 	}
 }

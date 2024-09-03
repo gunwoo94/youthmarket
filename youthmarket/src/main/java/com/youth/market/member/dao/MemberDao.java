@@ -3,6 +3,7 @@ package com.youth.market.member.dao;
 import java.util.List;
 
 import com.youth.market.member.dto.Member;
+import com.youth.market.sell.dto.Sell;
 
 public interface MemberDao {
 	Member select(String userId);
@@ -32,9 +33,6 @@ public interface MemberDao {
 	List<Member> blockList(int startRow, int endRow);
 
 	int block_count();
-<<<<<<< HEAD
-}
-=======
 
 	int sellCount(int userNo);
 
@@ -50,4 +48,3 @@ public interface MemberDao {
 
 	List<Sell> mypageSellList3(int userNo);
 }
->>>>>>> stash

@@ -34,8 +34,7 @@
 
 				<!-- 상점 등급 이미지 나오는 박스 -->
 				<div class="profile-image">
-					<img
-						src="${path }/resources/images/fileSave/${member.fileName }"
+					<img src="${path }/resources/images/fileSave/${member.fileName }"
 						height="300px" width="300px">
 				</div>
 				<br> <a class="market-grade" data-toggle="modal"
@@ -197,13 +196,8 @@
 											<span>&nbsp;${s.sellTitle}</span><br> <br>
 											<div class="price-time2">
 												<br> &nbsp;<img
-<<<<<<< HEAD
-													src="/tresure/resources/images/icon/heart.png" width="15px"
-													height="15px" style="margin-top: 2px;">&nbsp;${s.heartNum}
-=======
 													src="/youthmarket/resources/images/icon/heart.png"
 													width="15px" height="15px" style="margin-top: 2px;">&nbsp;${s.heartNum}
->>>>>>> stash
 												&nbsp;&nbsp;&nbsp;${s.timeago} <br> <span
 													style="font-size: 33px; color: black;">${s.price}원</span>
 											</div>

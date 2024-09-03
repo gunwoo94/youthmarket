@@ -3,6 +3,7 @@ package com.youth.market.member.service;
 import java.util.List;
 
 import com.youth.market.member.dto.Member;
+import com.youth.market.sell.dto.Sell;
 
 public interface MemberService {
 	Member select(String userId);
@@ -32,8 +33,6 @@ public interface MemberService {
 	List<Member> blockList(int startRow, int endRow);
 
 	int block_count();
-<<<<<<< HEAD
-=======
 
 	int sellCount(int userNo);
 
@@ -48,5 +47,5 @@ public interface MemberService {
 	List<Sell> mypageSellList2(int userNo);
 
 	List<Sell> mypageSellList3(int userNo);
->>>>>>> stash
+
 }
