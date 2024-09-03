@@ -9,7 +9,7 @@
 </head>
 <body>
 	<script type="text/javascript">
-		location.href = "sell/home.do"	
+		location.href = "sell/home.do"
 		//location.href ="admin/asminTest.do"
 		//location.href = "report/reportSearchForm.do"
 	</script>

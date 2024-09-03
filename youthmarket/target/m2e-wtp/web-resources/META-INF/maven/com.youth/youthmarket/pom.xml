@@ -17,7 +17,7 @@
 		<org.apache.tiles-version>3.0.8</org.apache.tiles-version>
 	</properties>
 	<dependencies>
-		
+
 		<!-- Tiles -->
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
@@ -39,14 +39,14 @@
 			<artifactId>tiles-extras</artifactId>
 			<version>${org.apache.tiles-version}</version>
 		</dependency>
-		
+
 		<!-- StringUtils -->
 		<dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
 		</dependency>
-	
+
 		<!-- JDK11 추가 -->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>
