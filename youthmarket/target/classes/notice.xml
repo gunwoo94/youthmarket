@@ -1,39 +1,133 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="noticens" >
-		<resultMap type="notice" id="noticeResult">
-		<result property="noticeNo" column="NOTICE_NO"/>
-		<result property="noticeType" column="NOTICE_TYPE"/>
-		<result property="noticeTitle" column="NOTICE_TITLE"/>
-		<result property="noticeWriter" column="NOTICE_WRITER"/>
-		<result property="noticeImg" column="NOTICE_IMG"/>
-		<result property="noticeHit" column="NOTICE_HIT"/>
-		<result property="createDate" column="CREATE_DATE"/>
-	</resultMap>
-	<insert id="insert" parameterType="notice">
-		<selectKey keyProperty="noticeNo" order="BEFORE"
-			resultType="integer">
-			select nvl(max(notice_no), 0) + 1 userNo from notice
-		</selectKey>
-		insert into notice values(#{noticeNo},
-		#{noticeType},#{noticeTitle},#{noticeWriter},#{noticeImg},0,sysdate)
-	</insert>
+<mapper namespace="noticens">
+   <resultMap type="notice" id="noticeResult">
+      <result property="noticeNo" column="NOTICE_NO" />
+      <result property="noticeTitle" column="NOTICE_TITLE" />
+      <result property="noticeContent" column="NOTICE_CONTENT" />
+      <result property="noticeHit" column="NOTICE_HIT" />
+      <result property="createDate" column="CREATE_DATE" />
+   </resultMap>
 
-	<select id="count" resultType="integer">
-		select count(*) from notice
-	</select>
-	<select id="noticeList" parameterType="map" resultMap="noticeResult">
-		select * from (select a.*, rowNum rn from (select * from notice order by notice_No desc
-			)a) where rn between #{startRow} and #{endRow}
-	</select>
-	<!-- 관리자 게시글 삭제 -->
-	<delete id="adminBoardDelete" parameterType="integer">
-		DELETE NOTICE WHERE NOTICE_NO = #{noticeNo}
-	</delete>
-	<!-- 관리자 공지사항 삭제 -->
-	<delete id="adminNoticeDelete" parameterType="integer">
-		DELETE NOTICE WHERE NOTICE_NO = #{noticeNo}
-	</delete>
+   <!-- 공지사항을 noticeNo로 조회 -->
+   <select id="selectNoticeByNo" parameterType="int"
+      resultType="notice">
+      SELECT
+      NOTICE_NO as noticeNo,
+      NOTICE_TITLE as noticeTitle,
+      NOTICE_CONTENT as noticeContent,
+      NOTICE_HIT as noticeHit,
+      TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') as createDate
+      FROM
+      NOTICE
+      WHERE
+      NOTICE_NO = #{noticeNo}
+   </select>
+
+   <!-- 공지사항 작성 -->
+   <insert id="insert" parameterType="notice">
+
+      <!-- 새로운 공지사항 번호 생성 -->
+      <selectKey keyProperty="noticeNo" order="BEFORE"
+         resultType="integer">
+         select nvl(max(notice_no), 0) + 1 userNo from notice
+      </selectKey>
+
+      <!-- 공지사항 데이터 삽입 -->
+      insert into notice
+      values(#{noticeNo},#{noticeTitle},#{noticeContent},0,sysdate)
+
+   </insert>
+ 
+    
+   <!-- 공지사항 수 카운트 -->
+   <select id="count" resultType="integer">
+      select count(*) from notice
+   </select>
+
+   <!-- 공지사항 리스트 불러오기 (페이징 처리) -->
+   <select id="noticeList" parameterType="map"
+      resultMap="noticeResult">
+      select * from (select a.*, rowNum rn from (select * from
+      notice order by notice_No desc
+      )a) where rn between #{startRow} and
+      #{endRow}
+   </select>
+
+   <!-- 관리자 게시글 삭제 -->
+   <delete id="adminBoardDelete" parameterType="integer">
+      DELETE NOTICE WHERE
+      NOTICE_NO = #{noticeNo}
+   </delete>
+
+   <!-- 관리자 공지사항 삭제 -->
+   <delete id="adminNoticeDelete" parameterType="integer">
+      DELETE NOTICE WHERE
+      NOTICE_NO = #{noticeNo}
+   </delete>
+
+   <!-- 추가: 공지사항 수정 -->
+   <!-- 공지사항을 수정하는 쿼리 -->
+   <update id="updateNotice" parameterType="integer">
+      UPDATE notice
+      SET
+      notice_title = #{noticeTitle},
+      notice_content = #{noticeContent},
+      create_date
+      = SYSDATE
+      WHERE notice_no = #{noticeNo}
+   </update>
+
+   <!-- 추가: 공지사항 상세 조회 -->
+   <!-- 특정 공지사항 번호에 해당하는 공지사항 상세 조회 쿼리 -->
+   <select id="selectNoticeById" parameterType="integer"
+      resultMap="noticeResult">
+      SELECT * FROM notice WHERE notice_no = #{noticeNo}
+   </select>
+
+
+
+<!-- 공지사항 검색 -->
+<select id="searchNotices" parameterType="map" resultMap="noticeResult">
+    SELECT * FROM (
+        SELECT n.*, ROW_NUMBER() OVER (ORDER BY notice_no) AS rnum
+        FROM (
+            SELECT * FROM notice
+            WHERE ${searchCategory} LIKE '%' || #{searchKeyword} || '%'
+        ) n
+    )
+    WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+</select>
+<!-- 검색된 공지사항의 총 개수 조회 쿼리 -->
+<select id="getTotalCount" parameterType="map" resultType="int">
+    SELECT COUNT(*)
+    FROM notice
+    <where>
+        <if test="searchCategory == 'noticeNo'">
+            AND notice_no = #{searchKeyword}
+        </if>
+        <if test="searchCategory == 'noticeTitle'">
+            AND notice_title LIKE '%' || #{searchKeyword} || '%'
+        </if>
+        <if test="searchCategory == 'noticeContent'">
+            AND notice_content LIKE '%' || #{searchKeyword} || '%'
+        </if>
+        <if test="searchCategory == 'noticeHit'">
+            AND notice_hit = #{searchKeyword}
+        </if>
+        <if test="searchCategory == 'createDate'">
+            AND create_date = #{searchKeyword}
+        </if>
+    </where>
+</select>
+
+ <!-- 공지사항의 조회수를 1 증가시키는 쿼리 -->
+<update id="increaseNoticeHit" parameterType="int">
+    UPDATE notice
+    SET notice_hit = notice_hit + 1
+    WHERE notice_no = #{noticeNo}
+</update>
+
 </mapper>
 

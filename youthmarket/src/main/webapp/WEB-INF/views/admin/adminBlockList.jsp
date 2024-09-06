@@ -191,6 +191,14 @@ a:hover {
 		alert(message);
 		location.href = data;
 	}
+	function pageView2(data, message) {
+	    alert(message);
+	    // 경로가 /admin/으로 시작하는지 확인 후, 이를 제거
+	    if (data.startsWith('/admin/')) {
+	        data = data.replace('/admin/', '/'); // '/admin/'을 ''로 대체
+	    }
+	    location.href = data;
+	}
 	// 회원 차단 기능 
 	function blockAccept(userNo) {
 	    let cf = confirm("차단하시겠습니까?");
@@ -221,7 +229,7 @@ a:hover {
 	}
 	
 </script>
-
+<script type="text/javascript" src="/youthmarket/resources/js/header.js"></script>
 </head>
 <body>
 	<div class="m-container">
@@ -235,11 +243,11 @@ a:hover {
 				<img class="menu-img" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/유저.png" />&nbsp;유저 관리
 			</div>
-			<div class="menu-div"
+			<!-- <div class="menu-div"
 				onclick="pageView('adminBoard.do','게시글 관리 페이지로 이동합니다.')">
 				<img class="menu-img2" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/게시글.png" />&nbsp;게시글 관리
-			</div>
+			</div> -->
 			<div class="menu-div"
 				onclick="pageView('adminNotice.do', '공지사항 관리 페이지로 이동합니다.')">
 				<img class="menu-img" alt="이미지 없음"
@@ -250,6 +258,10 @@ a:hover {
 				onclick="pageView('adminBlockList.do', '차단 회원 목록 페이지로 이동합니다.')">
 				<img class="menu-img" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/차단.png" />&nbsp; 차단 회원 목록
+			</div>
+				<div class="menu-div" onclick="pageView('/youthmarket/sell/home.do', '홈페이지로 이동합니다.')">
+				<img class="menu-img" alt="이미지 없음"
+					src="/youthmarket/resources/images/icon/icon.png" />&nbsp; 홈페이지로 이동
 			</div>
 		</div>
 		<div class="adminboard-container">
@@ -281,6 +293,7 @@ a:hover {
 								<th scope="col">이름</th>
 								<th scope="col">전화번호</th>
 								<th scope="col">가입 날짜</th>
+								<th scope="col">신고 누적 횟수</th>
 								<th scope="col">상태</th>
 
 							</tr>
@@ -288,7 +301,7 @@ a:hover {
 						<tbody class="a_content">
 							<c:if test="${empty blocklist }">
 								<tr>
-									<th colspan="6">데이터가 없습니다</th>
+									<th colspan="7">데이터가 없습니다</th>
 								</tr>
 							</c:if>
 							<c:if test="${not empty blocklist }">
@@ -299,7 +312,8 @@ a:hover {
 										<td><a>${member.userNo }</a></td>
 										<td><a>${member.userName }</a></td>
 										<td><a>${member.phone }</a></td>
-										<td><a>${member.createDate }</a></td>
+										<td><a><fmt:formatDate value="${member.createDate }" pattern="yyyy-MM-dd" /></a></td>
+										<td><a>${member.reportCount }회</a></td>
 										<td><c:if
 												test="${member.blackList == 'N' || member.status =='Y' }">
 												<button type="button" class="btn btn-primary"
@@ -316,7 +330,7 @@ a:hover {
 						</tbody>
 					</table>
 					
-					<div class="search-container">
+					<!-- <div class="search-container">
 						<form action="/search">
 							<select name="search_type">
 								<option value="title">회원번호</option>
@@ -324,7 +338,7 @@ a:hover {
 							</select> <input type="text" placeholder="Search..." name="search">
 							<button type="submit">검색</button>
 						</form>
-					</div>
+					</div> -->
 					
 					<ul class="pagination justify-content-center">
 						<!-- 앞에 보여줄 것이 있다 -->

@@ -49,15 +49,18 @@
 						<!-- 본인인증 방법 로그인 O && 카카오로그인 X && 네이버 로그인 X -->
 						<c:if test="${sessionScope.userId != null}">
 							<a href="${path }/member/logout.do" class="items">
-								${sessionScope.userName}님 환영합니다^ㅁ^<br> 로그아웃
+								${sessionScope.userName}님 <br> 로그아웃
 							</a>
 						</c:if>
 						<!-- 본인인증 로그인 X && 카카오로그인 X 네이버로그인 XX-->
 						<c:if test="${sessionScope.userId == null}">
+							<a href="${path}/admin/adminLoginForm.do" class="items">
+								<p>관리자</p>
+							</a>
 							<a href="${path}/member/loginForm.do" class="items">
 								<p>로그인</p>
 							</a>
-							<a href="${path}/member/joinForm.do" class="items">
+							<a href="${path}/nolay/joinForm.do" class="items">
 								<p>회원가입</p>
 							</a>
 						</c:if>
@@ -74,6 +77,15 @@
 					</div>
 					<div class="sun_wrap_li">
 						<ul id="sun_wrap_ul">
+							<li><a
+								href="${pageContext.request.contextPath}/notice/notice"
+								class="checkUserNo"><img
+									src="/youthmarket/resources/images/admin/공지사항.jpg"
+									alt="공지사항 이미지">공지사항</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/qa/QaBoard"
+								class="checkUserNo"><img
+									src="/youthmarket/resources/images/admin/유저.jpg" alt="문의 이미지">문의하기</a></li>
 							<li><a
 								href="${pageContext.request.contextPath}/chat/chatRoomList"
 								class="checkUserNo"><img

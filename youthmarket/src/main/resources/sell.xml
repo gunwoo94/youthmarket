@@ -42,24 +42,52 @@
 		<result column="IS_FOLLOW" property="isFollow" />
 		<result column="filename" property="fileName" />
 	</resultMap>
+	<select id="mypageSellList2" resultMap="sellresult"
+		parameterType="Integer">
+		SELECT
+		S.SELL_STATUS
+		FROM SELL S
+		JOIN
+		MEMBER M ON
+		M.USER_NO =
+		S.USER_NO
+		WHERE M.USER_NO=#{userNo} AND
+		S.STATUS = 'Y' AND
+		S.SELL_STATUS='Y'
+	</select>
 
-		<!-- 마이페이지 판매목록  -->
-	<select id="mypageSellList" resultMap="sellresult" parameterType="Integer">   
-   SELECT 
-           S.SELL_NO, 
-            S.CATEGORY_NO, 
-             S.SELL_TITLE, 
-             S.IMAGE_SELL, 
-             S.PRICE, 
-             (SELECT COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS "HEART_NUM",
-             S.SELL_STATUS, 
-             S.CREATE_DATE
-            FROM SELL S
-            JOIN MEMBER M ON M.USER_NO = S.USER_NO
-            WHERE M.USER_NO=#{userNo} AND S.STATUS = 'Y'
-             ORDER BY CREATE_DATE DESC
-   </select>
-   
+	<select id="mypageSellList3" resultMap="sellresult"
+		parameterType="Integer">
+		SELECT
+		S.SELL_STATUS
+		FROM SELL S
+		JOIN
+		MEMBER M ON
+		M.USER_NO =
+		S.USER_NO
+		WHERE M.USER_NO=#{userNo} AND
+		S.STATUS = 'Y' AND
+		S.SELL_STATUS='N'
+	</select>
+
+	<!-- 마이페이지 판매목록 -->
+	<select id="mypageSellList" resultMap="sellresult"
+		parameterType="Integer">
+		SELECT
+		S.SELL_NO,
+		S.CATEGORY_NO,
+		S.SELL_TITLE,
+		S.IMAGE_SELL,
+		S.PRICE,
+		(SELECT COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS "HEART_NUM",
+		S.SELL_STATUS,
+		S.CREATE_DATE
+		FROM SELL S
+		JOIN MEMBER M ON M.USER_NO = S.USER_NO
+		WHERE M.USER_NO=#{userNo} AND S.STATUS = 'Y'
+		ORDER BY CREATE_DATE DESC
+	</select>
+
 	<select id="sellList" parameterType="int" resultMap="sellresult">
 		SELECT
 		SELL_NO
@@ -280,9 +308,10 @@
 		FROM SELL S
 		LEFT JOIN MEMBER M ON S.USER_NO = M.USER_NO
 		WHERE S.STATUS = 'Y'
-		AND SELL_STATUS = 'Y'
+		AND
+		SELL_STATUS = 'Y'
 		AND M.STATUS = 'Y'
-		AND ROWNUM BETWEEN 1 AND 40 
+		AND ROWNUM BETWEEN 1 AND 40
 		ORDER BY S.CREATE_DATE DESC
 
 	</select>
@@ -290,25 +319,29 @@
 
 
 	<!-- 상품목록조회 더 보기 -->
-	<select id="getSellList" resultMap="sellresult">
-		SELECT SELL_NO, CATEGORY_NO,
-		SELL_TITLE, IMAGE_SELL, PRICE,
-		HEART_NUM,CREATE_DATE
-		from (select ROWNUM
-		AS "R", SELL_NO, CATEGORY_NO, SELL_TITLE, IMAGE_SELL,
-		PRICE,
-		(SELECT
-		COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS
-		"HEART_NUM",S.CREATE_DATE AS "CREATE_DATE"
-		FROM SELL S
-		LEFT JOIN MEMBER
-		M ON(S.USER_NO=M.USER_NO)
-		WHERE S.STATUS = 'Y'
-		AND SELL_STATUS = 'Y'
-		AND
-		M.STATUS = 'Y')
-		where R BETWEEN #{start} AND #{start}+#{limit}-1
-	</select>
+<select id="getSellList" parameterType="map" resultMap="sellresult">
+    SELECT * FROM (
+        SELECT
+            ROWNUM AS R,
+            SELL_NO,
+            CATEGORY_NO,
+            SELL_TITLE,
+            IMAGE_SELL,
+            PRICE,
+            (SELECT COUNT(*) FROM HEART H WHERE H.SELL_NO = S.SELL_NO) AS HEART_NUM,
+            S.CREATE_DATE
+        FROM 
+            SELL S
+        LEFT JOIN 
+            MEMBER M ON S.USER_NO = M.USER_NO
+        WHERE 
+            S.STATUS = 'Y'
+            AND S.SELL_STATUS = 'Y'
+            AND M.STATUS = 'Y'
+        ORDER BY S.SELL_NO ASC  -- 또는 필요한 다른 기준
+    )
+    WHERE R BETWEEN #{start} AND #{start} + #{limit} + 1
+</select>
 
 
 	<!-- 상품 상세보기 -->

@@ -36,15 +36,15 @@ public class MemberController {
 	private BCryptPasswordEncoder bpe;
 	@Autowired
 	private NoticeService ns;
+
 	private String emailChk;
-	
+
 	// 회원 가입 페이지 화면
-	@GetMapping("member/joinForm")
+	@GetMapping("/nolay/joinForm")
 	public void joinForm() {
 	}
-	
-	
-	//회원가입
+
+	// 회원가입
 	@PostMapping("/member/join")
 	public void join(Member member, Model model, HttpSession session) throws IOException {
 		int result = 0;
@@ -95,7 +95,7 @@ public class MemberController {
 	@PostMapping("/member/login")
 	public void login(Member member, Model model, HttpSession session) {
 		int result = 0;
-			
+
 		// 회원 정보 조회
 		Member member2 = ms.select(member.getUserId());
 
@@ -106,7 +106,7 @@ public class MemberController {
 
 				// 세션에 사용자 정보 저장
 				session.setAttribute("userId", member2.getUserId()); // member.getUserId() 대신 member2.getUserId()를 사용하는
-				session.setAttribute("loginUser", member2);														// 것이 더 명확합니다.
+				session.setAttribute("loginUser", member2); // 것이 더 명확합니다.
 				session.setAttribute("userName", member2.getUserName());
 				session.setAttribute("userNo", member2.getUserNo()); // userNo 추가
 
@@ -131,54 +131,45 @@ public class MemberController {
 	public void main() {
 
 	}
-	@GetMapping("/mypage/heartList.do")
-	public void heartList(HttpSession session, Model model) {
-		String userId = (String) session.getAttribute("userId");
-		Member member = ms.select(userId);
-		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		List<Heart> heartList = ms.mypageHeartList(loginUser.getUserNo());
-		
-		
-		model.addAttribute("member", member);
-		model.addAttribute("heartList", heartList);
-	}
+
 	// 마이페이지 화면 (로그인 상태일 때만 보여짐 )
 	@GetMapping("/mypage/mypage")
 	public void mypage(HttpSession session, Model model) {
 		String userId = (String) session.getAttribute("userId");
 		Member member = ms.select(userId);
 		Member loginUser = (Member) session.getAttribute("loginUser");
-		
-		 // 상품판매 조회
-        int sellCount = ms.sellCount(loginUser.getUserNo());
-        // 팔로워 수 조회
-        int followCount = ms.followCount(loginUser.getUserNo());
-        // 신고 수 조회
-        int reportCount = ms.reportCount(loginUser.getUserNo());
-        
-        // 상점 오픈일
-        int marketOpen = ms.marketOpen(loginUser.getUserNo());
-        
-        //	찜 리스트  
-        List<Heart> heartList = ms.mypageHeartList(loginUser.getUserNo());
-        
-        // 판매상품 리스트
-        List<Sell> sellList = ms.mypageSellList(loginUser.getUserNo());
-        for (Sell sell : sellList) {
-            sell.setTimeago(sell.getCreateDate());
-        }
-        
-        System.out.println("heartList =" + heartList);
-        
-        model.addAttribute("sellCount", sellCount);
-        model.addAttribute("followCount", followCount);
-        model.addAttribute("reportCount", reportCount);
-        model.addAttribute("marketOpen", marketOpen);
-        model.addAttribute("sellList", sellList);
+
+		// 상품판매 조회
+		int sellCount = ms.sellCount(loginUser.getUserNo());
+
+		// 팔로워 수 조회
+		int followCount = ms.followCount(loginUser.getUserNo());
+		// 신고 수 조회
+		int reportCount = ms.reportCount(loginUser.getUserNo());
+
+		// 상점 오픈일
+		int marketOpen = ms.marketOpen(loginUser.getUserNo());
+
+		// 판매상품 리스트
+		List<Sell> sellList = ms.mypageSellList(loginUser.getUserNo());
+		for (Sell sell : sellList) {
+			sell.setTimeago(sell.getCreateDate());
+		}
+
+		List<Sell> sellList2 = ms.mypageSellList2(loginUser.getUserNo());
+
+		List<Sell> sellList3 = ms.mypageSellList3(loginUser.getUserNo());
+
+		model.addAttribute("sellCount", sellCount);
+		model.addAttribute("followCount", followCount);
+		model.addAttribute("reportCount", reportCount);
+		model.addAttribute("marketOpen", marketOpen);
+		model.addAttribute("sellList", sellList);
+		model.addAttribute("sellList2", sellList2);
+		model.addAttribute("sellList3", sellList3);
 		model.addAttribute("member", member);
-		model.addAttribute("heartList", heartList);
-		
+
+		System.out.println("Sell List Size: " + sellList.size());
 	}
 
 	// 회원 정보 수정 페이지 화면
@@ -334,7 +325,7 @@ public class MemberController {
 
 	@GetMapping("/member/insertMember")
 	public void insertmember() {
-		for (int i = 1; i <50; i++) {
+		for (int i = 1; i < 50; i++) {
 			Member member = new Member();
 			member.setAccount("1111-" + i);
 			member.setBirth("2024-01-" + i);
@@ -349,16 +340,19 @@ public class MemberController {
 			ms.insert(member);
 		}
 	}
-	@GetMapping("member/insertMember2")
-	public void insertmember2() {
-		for(int i = 1; i <= 10; i++ ) {
-		Notice notice = new Notice();
-		notice.setNoticeType(""+i);
-		notice.setNoticeTitle("가나" + i);
-		notice.setNoticeWriter("홍길동" + i);
-		notice.setNoticeImg("A" + i);
-		notice.setNoticeHit(i);
-		ns.insert(notice);
-		}
+
+	
+	//찜리스트로 이동
+	@GetMapping("/mypage/heartList.do")
+	public void heartList(HttpSession session, Model model) {
+		String userId = (String) session.getAttribute("userId");
+		Member member = ms.select(userId);
+		Member loginUser = (Member) session.getAttribute("loginUser");
+		
+		List<Heart> heartList = ms.mypageHeartList(loginUser.getUserNo());
+		
+		
+		model.addAttribute("member", member);
+		model.addAttribute("heartList", heartList);
 	}
 }

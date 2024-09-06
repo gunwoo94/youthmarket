@@ -7,16 +7,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
 @Data
 public class Notice {
     private int noticeNo;
-    private String noticeType; 
     private String noticeTitle;
-    private String noticeWriter;
-    private String noticeImg;
     private int noticeHit;
     private Date createDate;
+    private String noticeContent;
+    
 }
+
 

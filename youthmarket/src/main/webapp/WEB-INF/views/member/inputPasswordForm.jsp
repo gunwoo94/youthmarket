@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-* {
+.main-container {
 	text-align: center;
 	
 }

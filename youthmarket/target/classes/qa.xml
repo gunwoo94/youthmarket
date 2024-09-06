@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="qans">
+
+	<resultMap type="qa" id="qaResult">
+		<result property="qaNo" column="QA_NO" />
+		<result property="qaName" column="QA_NAME" />
+		<result property="qaTitle" column="QA_TITLE" />
+		<result property="qaContent" column="QA_CONTENT" />
+		<result property="qaImg" column="QA_IMG" />
+		<result property="qaHit" column="QA_HIT" />
+		<result property="createDate" column="CREATE_DATE" />
+	</resultMap>
+	
+    <!-- QA 목록을 페이징 처리하여 가져오는 SQL -->
+   <select id="selectQaList" parameterType="map" resultMap="qaResult">
+    SELECT * FROM (
+        SELECT q.*, ROW_NUMBER() OVER (ORDER BY QA_NO DESC) AS rn
+        FROM QA q
+    )
+    WHERE rn BETWEEN #{startRow} AND #{endRow}
+</select>
+
+    <!-- 총 QA 게시글 수를 가져오는 SQL -->
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM QA
+    </select>
+
+    <!-- 특정 QA 게시글을 가져오는 SQL -->
+   <select id="selectQaById" parameterType="int" resultMap="qaResult">
+    SELECT * FROM QA WHERE QA_NO = #{qaNo}
+</select>
+
+    <!-- 새로운 QA 게시글을 삽입하는 SQL -->
+  <insert id="insertQa" parameterType="qa">
+  			<selectKey keyProperty="qaNo" order="BEFORE"
+			resultType="integer">
+			select nvl(max(qa_no), 0) + 1 qaNo from QA
+		</selectKey>
+        INSERT INTO QA (QA_NO, QA_NAME, QA_TITLE, QA_CONTENT, QA_IMG, QA_HIT, CREATE_DATE)
+        VALUES (#{qaNo}, #{qaName}, #{qaTitle}, #{qaContent}, #{qaImg}, #{qaHit}, #{createDate})
+    </insert>
+
+    <!-- 기존 QA 게시글을 수정하는 SQL -->
+    <update id="updateQa" parameterType="qa">
+        UPDATE QA
+        SET QA_NAME = #{qaName},
+            QA_TITLE = #{qaTitle},
+            QA_CONTENT = #{qaContent},
+            QA_IMG = #{qaImg},
+            QA_HIT = #{qaHit},
+            CREATE_DATE = #{createDate}
+        WHERE QA_NO = #{qaNo}
+    </update>
+
+    <!-- 특정 QA 게시글을 삭제하는 SQL -->
+   <delete id="deleteQa" parameterType="int">
+        DELETE FROM QA WHERE QA_NO = #{qaNo}
+    </delete>
+
+</mapper>

@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ include file="../common.jsp"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +10,6 @@
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="/youthmarket/resources/css/member/mypage.css">
-<script type="text/javascript" src="/youthmarket/resources/js/mypage.js"></script>
 <script type="text/javascript">
 	function del(){
 	    let pt = prompt("탈퇴하시려면 '회원 탈퇴'를 입력하세요")
@@ -30,7 +29,6 @@
 	}
 </script>
 </head>
-<body>
 <body>
 	<div id="wrap">
 		<div id="container">
@@ -53,7 +51,7 @@
 							<ul>
 								<li><a href="${path }/member/updateForm.do">정보 수정</a></li>
 								<li><a href="#">거래 후기</a></li>
-								<li><a href="#">1:1 문의</a></li>
+								<li><a href="${path }/admin/QaBoard.do">1:1 문의</a></li>
 								<li><button onclick="del()">탈퇴하기</button></li>
 							</ul>
 						</div>
@@ -64,57 +62,48 @@
 								<div class="profile_iamge_box">
 									<img
 										src="${path }/resources/images/fileSave/${member.fileName }"
-										alt="프로필 사진" width="300">
+										alt="프로필 사진" width="300px">
 								</div>
-								<div class="my_nickname">
-									<h2>${member.userName}</h2>
-								</div>
-								<div class="info-list">
-									<div class="market-open">
-										<img src="/youthmarket/resources/images/icon/상점오픈.png"
-											width="20" height="15" alt="상점오픈일 아이콘"
-											style="margin-top: 5px;"> &nbsp;상점오픈일
-										<div class="market-opendate">
-											<span>${marketOpen }</span>일전
+								<div class="profile_2">
+									<div class="my_nickname">
+										<h2>${member.userName}</h2>
+									</div>
+									<div class="info-list">
+										<div class="market-open">
+											<div class="market-opendate">
+												<img src="/youthmarket/resources/images/icon/상점오픈.png"
+													width="20" height="15" alt="상점오픈일 아이콘">&nbsp;<span>상점오픈일</span>&nbsp;<span>${marketOpen }일
+													전</span>
+											</div>
+										</div>
+
+										<div class="follower">
+											<div class="market-follower">
+												<img src="/youthmarket/resources/images/icon/팔로워.png"
+													width="20" height="15" alt="팔로워 아이콘">&nbsp;<span>팔로워</span>&nbsp;<span>${followCount }명</span>
+											</div>
+										</div>
+
+										<div class="sell-product">
+											<div class="market-sell">
+												<img src="/youthmarket/resources/images/icon/판매수.png"
+													width="20" height="15" alt="상품판매 아이콘"> &nbsp; <span>상품판매</span>&nbsp;<span>${sellCount }회</span>
+											</div>
+										</div>
+
+										<div class="report">
+											<div class="market-report">
+												<img src="/youthmarket/resources/images/icon/신고수.png"
+													width="20" height="15" alt="신고 아이콘""> &nbsp; <span>신고</span>&nbsp;<span>${reportCount }회</span>
+											</div>
 										</div>
 									</div>
-
-									<div class="follower">
-										<img src="/youthmarket/resources/images/icon/팔로워.png"
-											width="20" height="15" alt="팔로워 아이콘" style="margin-top: 5px;">
-										&nbsp;팔로워
-										<div class="market-follower">
-											<span>${followCount }</span> 명
-										</div>
+									<div class="button-area1">
+										<a
+											href="${pageContext.request.contextPath }/follow/followList"
+											class="following-list">팔로잉 목록</a>
 									</div>
-
-									<div class="sell-product">
-										<img src="/youthmarket/resources/images/icon/판매수.png"
-											width="20" height="15" alt="상품판매 아이콘"
-											style="margin-top: 5px;"> &nbsp;상품판매
-										<div class="market-sell">
-											<span>${sellCount }</span> 회
-										</div>
-									</div>
-
-									<div class="report">
-										<img src="/youthmarket/resources/images/icon/신고수.png"
-											width="20" height="15" alt="신고 아이콘" style="margin-top: 5px;">
-										&nbsp;신고
-										<div class="market-report">
-											<span>${reportCount }</span>회
-										</div>
-									</div>
-									<br> <br>
 								</div>
-								<br> <br> <br>
-
-								<div class="button-area1">
-									<a href="${pageContext.request.contextPath }/follow/followList"
-										class="following-list">&nbsp;&nbsp;&nbsp;&nbsp;팔로잉 목록</a>
-								</div>
-
-							</div>
 							</div>
 							<div class="my_product">
 								<div class="my_product_title">
@@ -124,15 +113,21 @@
 									<ul>
 										<li class="active"><a>전체</a></li>
 										<li class=""><a>판매중</a></li>
-										<li class=""><a>예약중</a></li>
 										<li class=""><a>판매완료</a></li>
 									</ul>
 								</div>
 								<div class="product_count_and_sort">
-									<div class="product_count">
-										<span>총</span> <span>(개수)</span> <span>개</span>
+									<div class="product_count active">
+										<span>총</span> <span>${fn:length(sellList)}</span> <span>개</span>
 									</div>
-									<div class="product_sort">
+									<div class="product_count">
+										<span>총</span> <span>${fn:length(sellList2)}</span> <span>개</span>
+
+									</div>
+									<div class="product_count">
+										<span>총</span> <span>${fn:length(sellList3)}</span> <span>개</span>
+									</div>
+									<!-- <div class="product_sort">
 										<ul>
 											<li class="on"><button>최신순</button></li>
 											<span> &#124; </span>
@@ -140,58 +135,120 @@
 											<span> &#124; </span>
 											<li class=""><button>높은가격순</button></li>
 										</ul>
-									</div>
+									</div> -->
 								</div>
 								<div class="product_list_box">
 									<div class="product_list active">
-										<p>상품 전체 리스트 넣는 곳</p>
-										<div id="productshow" class="box">
-											<div class="displayList"
-												style="flex-wrap: wrap; display: flex; margin: auto; padding-top: 23px;">
-												<c:forEach var="s" items="${sellList}" varStatus="status">
-													<div class="item col-2">
-														<div class="item" onclick="sellDetail(${s.sellNo})">
-															<div id="itemSolid" class="slist-items">
-																<img src="${path}/resources/images/sell/${s.imgSell}"
-																	width="100%" height="150px;"
-																	class="rounded float-start" alt="">
-																<c:if test="${s.sellStatus eq 'N' }">
-																	<div class="over-img"></div>
-																	<div class="text-c"
-																		style="color: white; margin-left: 71px; margin-top: -93px; margin-bottom: 75px;">
-																		<h3>판매완료</h3>
-																	</div>
-																</c:if>
-																<div class="price-time">
-																	<span>&nbsp;${s.sellTitle}</span><br> <br>
-																	<div class="price-time2">
-																		<br>&nbsp;<img
-																			src="/youthmarket/resources/images/icon/heart.png"
-																			width="15px" height="15px" style="margin-top: 2px;">&nbsp;${s.heartNum}
-																		&nbsp;&nbsp;&nbsp;${s.timeago} <br> <span
-																			style="font-size: 33px; color: black;">${s.price}원</span>
-																	</div>
+										<c:forEach var="s" items="${sellList}" varStatus="status">
+											<div class="product">
+												<div id="itemSolid" class="slist-items">
+													<img src="${path}/resources/images/sell/${s.imgSell}"
+														alt="" class="prImg hover"
+														onclick="sellDetail(${s.sellNo})">
+													<%-- <c:if test="${s.sellStatus eq 'N' }">
+														<div class="over-img"></div>
+														<div class="text-c">
+															<h3>판매완료</h3>
+														</div>
+													</c:if> --%>
+													<div class="price-time">
+														<span onclick="sellDetail(${s.sellNo})" class="hover">&nbsp;${s.sellTitle}</span><br>
+														<div class="time">
+															<div class="ta_end">
+																<img src="${path }/resources/images/icon/heart.png"
+																	class="htImg">${s.heartNum}&nbsp;
+															</div>
+															<div class="ta_end">&nbsp;${s.timeago}</div>
+														</div>
+														<div class="price">
+															<c:if test="${s.sellStatus eq 'Y' }">
+																<span style="font-size: 25px; font-weight: bold;">&nbsp;${s.price}원</span>
+															</c:if>
+															<c:if test="${s.sellStatus eq 'N' }">
+																<span style="font-size: 25px; font-weight: bold;">&nbsp;판매완료</span>
+															</c:if>
+														</div>
+													</div>
+												</div>
+											</div>
+										</c:forEach>
+										<c:if test="${empty sellList}">
+											<div class="no_pr">
+												<p>상품이 없습니다.</p>
+											</div>
+										</c:if>
+									</div>
+									<div class="product_list">
+										<c:forEach var="s" items="${sellList}" varStatus="status">
+											<c:if test="${s.sellStatus eq 'Y' }">
+												<div class="product">
+													<div id="itemSolid" class="slist-items">
+														<img src="${path}/resources/images/sell/${s.imgSell}"
+															alt="" class="prImg hover"
+															onclick="sellDetail(${s.sellNo})">
+														<div class="price-time">
+															<span onclick="sellDetail(${s.sellNo})" class="hover">&nbsp;${s.sellTitle}</span><br>
+															<div class="time">
+																<div class="ta_end">
+																	<img src="${path }/resources/images/icon/heart.png"
+																		class="htImg">${s.heartNum}&nbsp;
 																</div>
+																<div class="ta_end">&nbsp;${s.timeago}</div>
+															</div>
+															<div class="price">
+																<c:if test="${s.sellStatus eq 'Y' }">
+																	<span style="font-size: 25px; font-weight: bold;">&nbsp;${s.price}원</span>
+																</c:if>
 															</div>
 														</div>
 													</div>
-												</c:forEach>
+												</div>
+											</c:if>
+										</c:forEach>
+										<c:if test="${fn:length(sellList2) == 0}">
+											<div class="no_pr">
+												<p>판매중인 상품이 없습니다.</p>
 											</div>
-
-										</div>
+										</c:if>
 									</div>
 									<div class="product_list">
-										<p>판매중 상품 리스트 넣는 곳</p>
-									</div>
-									<div class="product_list">
-										<p>예약중 상품 리스트 넣는 곳</p>
-									</div>
-									<div class="product_list">
-										<p>판매완료 리스트 넣는 곳</p>
+										<c:forEach var="s" items="${sellList}" varStatus="status">
+											<c:if test="${s.sellStatus eq 'N' }">
+												<div class="product">
+													<div id="itemSolid" class="slist-items">
+														<img src="${path}/resources/images/sell/${s.imgSell}"
+															alt="" class="prImg hover"
+															onclick="sellDetail(${s.sellNo})">
+														<%-- <c:if test="${s.sellStatus eq 'N' }">
+														<div class="over-img"></div>
+														<div class="text-c">
+															<h3>판매완료</h3>
+														</div>
+													</c:if> --%>
+														<div class="price-time">
+															<span onclick="sellDetail(${s.sellNo})" class="hover">&nbsp;${s.sellTitle}</span><br>
+															<div class="time">
+																<div class="ta_end">
+																	<img src="${path }/resources/images/icon/heart.png"
+																		class="htImg">${s.heartNum}&nbsp;
+																</div>
+																<div class="ta_end">&nbsp;${s.timeago}</div>
+															</div>
+															<div class="price">
+																<span style="font-size: 25px; font-weight: bold;">&nbsp;판매완료</span>
+															</div>
+														</div>
+													</div>
+												</div>
+											</c:if>
+										</c:forEach>
+										<c:if test="${fn:length(sellList3) == 0}">
+											<div class="no_pr">
+												<p>판매된 상품이 없습니다.</p>
+											</div>
+										</c:if>
 									</div>
 								</div>
-
-
 							</div>
 						</div>
 					</div>
@@ -199,15 +256,36 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
-
-
-
-
 </body>
+
+<script>
+    window.onload = function () {
+        const tabBtn = document.querySelectorAll(".product_section > ul > li"); //버튼 설정
+        const tabCont = document.querySelectorAll(".product_list_box > div");   //콘텐츠 설정
+        const tabCont2 = document.querySelectorAll(".product_count_and_sort > div");   //콘텐츠 설정
+                
+        tabCont.forEach(el => el.style.display = "none");   //모든 콘텐츠를 숨김
+        tabCont2.forEach(el => el.style.display = "none");   //모든 콘텐츠를 숨김
+        tabCont[0].style.display = "flex";     //첫 번째 콘텐츠를 보이게 설정
+        tabCont2[0].style.display = "block";     //첫 번째 콘텐츠를 보이게 설정
+
+        tabBtn.forEach((tab, index) => {
+            tab.addEventListener("click", () => {
+                tabBtn.forEach(tab => tab.classList.remove("active"));  //모든 버튼 클래스 삭제
+                tab.classList.add("active");        //클릭한 버튼만 클래스 추가
+
+                tabCont.forEach(cont => cont.style.display = "none");   //모든 콘텐츠를 숨김
+                tabCont2.forEach(cont => cont.style.display = "none");   //모든 콘텐츠를 숨김
+                tabCont[index].style.display = "flex";     //클릭한 버튼의 콘텐츠 내용을 보여줌
+                tabCont2[index].style.display = "block";     //클릭한 버튼의 콘텐츠 내용을 보여줌
+            });
+        });
+    };
+    function sellDetail(sellNo){
+			location.href = "${pageContext.request.contextPath}/sell/sellDetail/"+sellNo;
+		}
+
+</script>
 <script>
       function sellDetail(sellNo){
          location.href = "${pageContext.request.contextPath}/sell/sellDetail/"+sellNo;
@@ -216,25 +294,28 @@
 
 
 <script>
-    window.onload = function () {
-        const tabBtn = document.querySelectorAll(".product_section > ul > li"); //버튼 설정
-        const tabCont = document.querySelectorAll(".product_list_box > div");   //콘텐츠 설정
-                
-        tabCont.forEach(el => el.style.display = "none");   //모든 콘텐츠를 숨김
-        tabCont[0].style.display = "block";     //첫 번째 콘텐츠를 보이게 설정
+window.onload = function () {
+    const tabBtn = document.querySelectorAll(".product_section > ul > li"); //버튼 설정
+    const tabCont = document.querySelectorAll(".product_list_box > div");   //콘텐츠 설정
+    const tabCont2 = document.querySelectorAll(".product_count_and_sort > div");   //콘텐츠 설정
+            
+    tabCont.forEach(el => el.style.display = "none");   //모든 콘텐츠를 숨김
+    tabCont2.forEach(el => el.style.display = "none");   //모든 콘텐츠를 숨김
+    tabCont[0].style.display = "flex";     //첫 번째 콘텐츠를 보이게 설정
+    tabCont2[0].style.display = "block";     //첫 번째 콘텐츠를 보이게 설정
 
-        tabBtn.forEach((tab, index) => {
-            tab.addEventListener("click", () => {
-                tabBtn.forEach(tab => tab.classList.remove("active"));  //모든 버튼 클래스 삭제
-                tab.classList.add("active");        //클릭한 버튼만 클래스 추가
+    tabBtn.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+            tabBtn.forEach(tab => tab.classList.remove("active"));  //모든 버튼 클래스 삭제
+            tab.classList.add("active");        //클릭한 버튼만 클래스 추가
 
-                tabCont.forEach(cont => cont.style.display = "none");   //모든 콘텐츠를 숨기
-                tabCont[index].style.display = "block";     //클릭한 버튼의 콘텐츠 내용을 보여줌
-            });
+            tabCont.forEach(cont => cont.style.display = "none");   //모든 콘텐츠를 숨김
+            tabCont2.forEach(cont => cont.style.display = "none");   //모든 콘텐츠를 숨김
+            tabCont[index].style.display = "flex";     //클릭한 버튼의 콘텐츠 내용을 보여줌
+            tabCont2[index].style.display = "block";     //클릭한 버튼의 콘텐츠 내용을 보여줌
         });
-       	
-        
-    };
+    });
+};
 </script>
 <script>
 
@@ -298,7 +379,6 @@ $(".chBox").click(function(){
   
   
   </script>
-
 </body>
 
 </html>

@@ -18,7 +18,8 @@
 		<typeAlias alias="report" type="com.youth.market.report.dto.Report"/>
 		<typeAlias alias="heart" type="com.youth.market.heart.dto.Heart"/>
 		<typeAlias alias="recent" type="com.youth.market.recent.dto.Recent"/>
-		
+		<typeAlias alias="notice" type="com.youth.market.admin.dto.Notice"/>
+		<typeAlias alias="qa" type="com.youth.market.admin.dto.Qa"/>
 	</typeAliases>
 		<mappers>
 			<mapper resource="member.xml"/>
@@ -29,6 +30,8 @@
 			<mapper resource="report.xml"/>
 			<mapper resource="heart.xml"/>
 			<mapper resource="recent.xml"/>
+			<mapper resource="notice.xml"/>
+			<mapper resource="qa.xml"/>
 		</mappers>
 	
 </configuration>

@@ -61,7 +61,7 @@
 
 			<div>
 				<ul>
-					<li><a href="joinForm.do">회원가입</a></li>
+					<li><a href="/youthmarket/nolay/joinForm.do">회원가입</a></li>
 					<li>&nbsp;|&nbsp;</li>
 					<li><a href="findIdForm.do">아이디 찾기</a></li>
 					<li>&nbsp;|&nbsp;</li>

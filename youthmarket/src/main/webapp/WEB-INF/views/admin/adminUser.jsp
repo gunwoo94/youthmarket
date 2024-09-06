@@ -144,13 +144,6 @@ input {
   font-size: 14px;
 }
 
-img {
-  position : absolute;
-  width: 17px;
-  top: 10px;
-  right: 12px;
-  margin: 0;
-}
 
 .h-100 {
     display: flex;
@@ -264,30 +257,28 @@ img {
 <body>
 	<div class="m-container">
 		<div class="menu-main-container">
-			<div class="menu-div"
-				onclick="pageView('adminLoginForm.do', '관리자 로그인으로 이동합니다.')">
-				<img class="menu-img5">&nbsp;관리자 페이지
+			<div class="menu-div" onclick="pageView('adminLoginForm.do', '관리자 로그인으로 이동합니다.')">
+				<img class="menu-img5"  >&nbsp;관리자 페이지
 			</div>
-			<div class="menu-div"
-				onclick="pageView('adminUser.do','유저 관리 페이지로 이동합니다.')">
+			<div class="menu-div" onclick="pageView('adminUser.do','유저 관리 페이지로 이동합니다.')">
 				<img class="menu-img" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/유저.png" />&nbsp;유저 관리
 			</div>
-			<div class="menu-div"
-				onclick="pageView('adminBoard.do','게시글 관리 페이지로 이동합니다.')">
+			<!-- <div class="menu-div" onclick="pageView('adminBoard.do','게시글 관리 페이지로 이동합니다.')">
 				<img class="menu-img2" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/게시글.png" />&nbsp;게시글 관리
-			</div>
-			<div class="menu-div"
-				onclick="pageView('adminNotice.do', '공지사항 관리 페이지로 이동합니다.')">
+			</div> -->
+			<div class="menu-div" onclick="pageView('adminNotice.do', '공지사항 관리 페이지로 이동합니다.')">
 				<img class="menu-img" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/공지사항.png" />&nbsp; 공지사항 관리
-				
 			</div>
-			<div class="menu-div"
-				onclick="pageView('adminBlockList.do', '차단 회원 목록 페이지로 이동합니다.')">
+			<div class="menu-div" onclick="pageView('adminBlockList.do', '차단 회원 목록 페이지로 이동합니다.')">
 				<img class="menu-img" alt="이미지 없음"
 					src="/youthmarket/resources/images/admin/차단.png" />&nbsp; 차단 회원 목록
+			</div>
+	<div class="menu-div" onclick="pageView('/youthmarket/sell/home.do', '홈페이지로 이동합니다.')">
+				<img class="menu-img" alt="이미지 없음"
+					src="/youthmarket/resources/images/icon/icon.png" />&nbsp; 홈페이지로 이동
 			</div>
 		</div>
 		<div class="adminboard-container">
@@ -319,8 +310,8 @@ img {
 								<th scope="col">이름</th>
 								<th scope="col">전화번호</th>
 								<th scope="col">가입 날짜</th>
+								<th scope="col">신고 누적 횟수</th>
 								<th scope="col">상태</th>
-								<th scope="col">삭제</th>
 								
 							</tr>
 						</thead>
@@ -338,7 +329,8 @@ img {
 										<td><a>${member.userNo }</a></td>
 										<td><a>${member.userName }</a></td>
 										<td><a>${member.phone }</a></td>
-										<td><a>${member.createDate }</a></td>
+										<td><a><fmt:formatDate value="${member.createDate }" pattern="yyyy-MM-dd" /></a></td>
+										<td><a>${member.reportCount }회</a></td>
 										<td><c:if
 												test="${member.blackList == 'N' || member.status =='Y' }">
 												<button type="button" class="btn btn-primary"
@@ -348,11 +340,6 @@ img {
 												<button type="button" class="btn btn-danger"
 													onclick="blockCancel(${member.userNo })">차단</button>
 											</c:if></td>
-
-										<td>
-											<button type="button" class="btn btn-secondary"
-												onclick="userDelete(${member.userNo })">삭제</button>
-										</td>
 									</tr>
 								</c:forEach>
 
@@ -360,7 +347,7 @@ img {
 						</tbody>
 					</table>
 
-					<div class="search-container">
+			<!-- 		<div class="search-container">
 						<form action="/search">
 							<select name="search_type">
 								<option value="title">회원번호</option>
@@ -368,7 +355,7 @@ img {
 							</select> <input type="text" placeholder="Search..." name="search">
 							<button type="submit">검색</button>
 						</form>
-					</div>
+					</div> -->
 
 					<ul class="pagination justify-content-center">
 						<!-- 앞에 보여줄 것이 있다 -->

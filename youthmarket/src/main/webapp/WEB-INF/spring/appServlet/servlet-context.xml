@@ -41,6 +41,9 @@
 		<interceptor>
 			<mapping path="/sell/sellInsertForm.do"/>
 			<mapping path="/sell/sellInsert.do"/>
+			<mapping path="/mypage/heartList.do"/>
+			<mapping path="/chat/chatRoomList.do"/>
+			<mapping path="/qa/QaBoard"/>
 			<beans:ref bean="lc"/>
 		</interceptor>
 	</interceptors>
