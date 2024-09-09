@@ -160,50 +160,90 @@
 </tr>
 </table>
 
-	// localStorage에서 products 키값 가져오기.
-	let sideBarProducts = localStorage.getItem("products");
 
-	// 만약 products가 undefined가 아니라면 list 변수에 JSON.parse(sideBarProducts)를 통해서 JSON Array를 만들고, 그게 아니라면 list 변수를 새로운 배열로 생성한다.
-	let sideBarList = sideBarProducts ? JSON.parse(sideBarProducts) : [];
 
-	<c:choose>
-		<c:when test="${sessionScope.loginUser != null}">
-			let sideBarUrl = "${pageContext.request.contextPath}/recent/" + (sideBarList ? "update" : "products");
 
-			$.ajax({
-				   async : false,
-				   url : sideBarUrl,
-				   data : JSON.stringify(sideBarList),
-				   type : "post",
-				   dataType : "json",
-				   contentType : "application/json",
-				   success : function(data) {
+// localStorage에서 products 키값 가져오기.
+let sideBarProducts = localStorage.getItem("products");
 
-					localStorage.removeItem("products");
-					$("#nrecentlyList").children().remove();
-					$(data).each((i, elem) => {
-						if (elem.crawl == "N") {
-							elem.imgSrc = "${pageContext.request.contextPath}" + elem.imgSrc;
-						}
-						console.log("로그인 된 상태 -> href : ${pageContext.request.contextPath}/sell/sellDetail/" 
-								+ elem.sellNo, ", imgSrc :", elem.imgSrc, ", crawl:", elem.crawl);
-						$("#nrecentlyList").append($("<li>")
-								   .append($("<a>", { href : "${pageContext.request.contextPath}/sell/sellDetail/" + elem.sellNo })
-								   .append($("<img>", { src : elem.imgSrc }).addClass("nrecentlyImage")))
-								   .append($("<input>", {type : "hidden", name : "recentNo", value : elem.recentNo}))
-								   .append($("<input>", {type : "hidden", name : "sellNo", value : elem.sellNo}))
-								   .append($("<input>", {type : "hidden", name : "imgSrc", value : elem.imgSrc}))
-								   .append($("<input>", {type : "hidden", name : "crawl", value : elem.crawl}))
-								   .append($("<button>", { text : "X", class : "deleteBtn" })))
-						});
-						$("#nrecentlyCnt").text(data.length);
-					},
-				   error : function() {
-						console.log("오류 발생");
-					}
-				});
-		</c:when>
-	<c:otherwise>
+// 만약 products가 undefined가 아니라면 list 변수에 JSON.parse(sideBarProducts)를 통해서 JSON Array를 만들고, 그게 아니라면 list 변수를 새로운 배열로 생성한다.
+let sideBarList = sideBarProducts ? JSON.parse(sideBarProducts) : [];
+
+<c:choose>
+    <c:when test="${sessionScope.loginUser != null}">
+    let sideBarUrl = sideBarList.length > 0 ? "${pageContext.request.contextPath}/recent/update" : "${pageContext.request.contextPath}/recent/products";
+
+        $.ajax({
+            async: false,
+            url: sideBarUrl,
+            data: JSON.stringify(sideBarList),
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data) {
+                console.log("Response data: ", data); // 수신한 원시 데이터 로그
+                if (!data || data.length === 0) {
+                    console.error("Received null or empty data from server");
+                    return;
+                }
+                console.log("Sending data to server:", JSON.stringify(sideBarList));
+                console.log("Processing received data: ", data);
+                localStorage.removeItem("products");
+                $("#nrecentlyList").children().remove();
+
+                $(data).each((i, elem) => {
+                    if (!elem || !elem.imgSell) {
+                        console.error("imgSell is not present or elem is null: ", elem);
+                        return;
+                    }
+                    
+                    // 이미지 경로 수정
+                    elem.imgSell = "${path}/resources/images/sell/" + elem.imgSell;
+
+                    $("#nrecentlyList")
+                        .append($("<li>")
+                            .append($("<a>", { href: "${pageContext.request.contextPath}/sell/sellDetail/" + elem.sellNo })
+                                .append($("<img>", { src: elem.imgSell }).addClass("nrecentlyImage"))
+                            )
+                            .append($("<input>", { type: "hidden", name: "recentNo", value: elem.recentNo }))
+                            .append($("<input>", { type: "hidden", name: "sellNo", value: elem.sellNo }))
+                            .append($("<input>", { type: "hidden", name: "imgSell", value: elem.imgSell }))
+                            .append($("<button>", { text: "X", class: "deleteBtn" }))
+                        );
+                });
+	
+                $("#nrecentlyCnt").text(data.length);
+            },
+
+            error: function() {
+                console.log("오류 발생");
+            }
+        });
+    </c:when>
+    <c:otherwise>
+        
+        // 리스트가 빈값이 아니라면
+        if (sideBarList) {
+            $("#nrecentlyList").children().remove();
+
+            for (let i = 0; i < sideBarList.length; i++) {
+                // 경로 수정
+                sideBarList[i].imgSell = "${path}/resources/images/sell/" + sideBarList[i].imgSell;
+                
+                $("#nrecentlyList")
+                    .append($("<li>")
+                        .append($("<a>", { href: "${pageContext.request.contextPath}/sell/sellDetail/" + sideBarList[i].sellNo })
+                            .append($("<img>", { src: sideBarList[i].imgSell }).addClass("nrecentlyImage"))
+                        )
+                        .append($("<input>", { type: "hidden", name: "sellNo", value: sideBarList[i].sellNo }))
+                        .append($("<input>", { type: "hidden", name: "imgSell", value: sideBarList[i].imgSell }))
+                        .append($("<button>", { text: "X", class: "deleteBtn" }))
+                    );
+            }
+        }
+    </c:otherwise>
+</c:choose>
+
 
 
 - 로컬스토리지를 이용하여서 상품을 클릭 시, 상품상세페이지로 이동할때 상품정보를 로컬스토리지에 세팅하는 스크립트를 사용하였습니다. 
