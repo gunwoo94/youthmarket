@@ -163,17 +163,19 @@
 
 
 
-// localStorage에서 products 키값 가져오기.
-let sideBarProducts = localStorage.getItem("products");
 
-// 만약 products가 undefined가 아니라면 list 변수에 JSON.parse(sideBarProducts)를 통해서 JSON Array를 만들고, 그게 아니라면 list 변수를 새로운 배열로 생성한다.
-let sideBarList = sideBarProducts ? JSON.parse(sideBarProducts) : [];
+	// localStorage에서 products 키값 가져오기.
+	let sideBarProducts = localStorage.getItem("products");
 
-<c:choose>
+	// 만약 products가 undefined가 아니라면 list 변수에 JSON.parse(sideBarProducts)를 통해서 JSON Array를 만들고, 그게 아니라면 list 변수를 새로운 배열로 생성한다.
+	let sideBarList = sideBarProducts ? JSON.parse(sideBarProducts) : [];
+
+	<c:choose>
+
     <c:when test="${sessionScope.loginUser != null}">
     let sideBarUrl = sideBarList.length > 0 ? "${pageContext.request.contextPath}/recent/update" : "${pageContext.request.contextPath}/recent/products";
-
-        $.ajax({
+      
+	$.ajax({
             async: false,
             url: sideBarUrl,
             data: JSON.stringify(sideBarList),
@@ -242,7 +244,7 @@ let sideBarList = sideBarProducts ? JSON.parse(sideBarProducts) : [];
             }
         }
     </c:otherwise>
-</c:choose>
+    </c:choose>
 
 
 
