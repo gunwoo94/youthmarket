@@ -1,2 +1,2 @@
 # youthmarket Project
-### <img src="![icon](https://github.com/user-attachments/assets/e3e660b1-719d-4484-994b-efdb280d5b64)"  width="30px" height="30px"> [청년마켓] 중고물품 거래 웹사이트
+![image2](https://github.com/user-attachments/assets/e7b9de29-8a89-434e-bacd-6dad663f19c8) [청년마켓] 중고물품 거래 웹사이트
