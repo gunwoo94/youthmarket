@@ -51,3 +51,89 @@
 </div>
 
 <br>
+
+## 😀 ER-DIAGRAM 
+<table>
+<tr>
+	<th>
+	  ER-DIAGRAM
+	</th>
+</tr>
+<tr>
+	<td width="50%">
+		<img src="https://github.com/user-attachments/assets/ea4bdc32-2502-4fc5-9770-16e3f2957bfd" width="600" height="200"/>
+	</td>
+</tr>
+</table>
+
+<br>
+
+## 😆 UI
+<table>
+<tr>
+	<th>
+		메인페이지
+	</th>
+	<th>
+		관리자페이지
+	</th>
+
+</tr>
+<tr>
+	<td width="30%">
+		<img src="https://github.com/user-attachments/assets/c51b273a-75f7-4ad7-9bf5-6acbbece89c8" width="600" height="200"/>
+	</td>
+	<td width="30%">
+		<img src="https://github.com/user-attachments/assets/d8e58244-bd4c-46a7-a124-1569eba93cf6" width="600" height="200"></td>
+
+</tr>
+<tr>
+	<th>
+	    상품등록하기
+	</th>
+	<th>상품상세보기</th>
+</tr>
+<tr>
+	<td>
+	 <img src="https://github.com/user-attachments/assets/699ab77e-7625-4703-b9b2-61a0fbe28d18" width="600" height="200"/>
+	</td>
+	<td>
+	  <img src="https://github.com/user-attachments/assets/12265720-0bf1-47a1-a233-574f30e2e06b" width="600" height="200"/>
+	</td>
+</tr>
+<tr>
+	<th>팔로우하기
+	</th>
+	<th>
+	    팔로잉 목록
+	</th>
+</tr>
+<tr>
+	<td>
+	  <img src="https://github.com/user-attachments/assets/5003cf48-61a4-4b6b-83a1-b16f2e2b270b" width="600" height="200"/>
+	</td>
+	<td>
+	  <img src="https://github.com/user-attachments/assets/ee67cc9c-0d52-4a33-9c46-fe3d24c811c6" width="600" height="200"/>
+	</td>
+<tr>
+<tr>
+	<th>내상점
+	</th>
+	<th>
+	    내상점 찜목록
+	</th>
+</tr>
+<tr>
+	<td>
+	   <img src="https://github.com/user-attachments/assets/886700ab-eb31-4da1-a6af-b3270b6b0173" width="600" height="200"/>
+	</td>
+	<td>
+	   <img src="https://github.com/user-attachments/assets/8c3e7a9a-9ef5-4cc1-be57-cc6cd5aba48d" width="600" height="200"/>
+	</td>
+<tr>
+</table>
+
+<br>
+  
+
+
