@@ -45,8 +45,7 @@
 	<img src="https://img.shields.io/badge/Apache Tomcat-F8DC75?style=flat&logo=Apache Tomcat&logoColor=white" />
 	<img src="https://user-images.githubusercontent.com/113049166/222707121-ef026546-b995-4c35-8cdd-5dcd1e5825d5.svg" />
 	<img src="https://user-images.githubusercontent.com/113049166/222707252-fc23c89e-a4f6-49a0-b550-7b26aa323fad.svg" />
-	<img src="https://user-images.githubusercontent.com/113049166/222707283-1d75770f-1c1d-441d-bccf-2d045850600f.svg" />
-	<img src="https://user-images.githubusercontent.com/113049166/222707320-eada9a30-6441-4f77-aea9-511da0362e0b.svg" />
+	
 
 </div>
 
